@@ -1,0 +1,15 @@
+extends: default
+heading:
+  h1, h2, h3:
+    page_break_after: always
+    page_break_before: always
+footer:
+  height: 0.45in
+  recto:
+    right:
+      content: '{section-or-chapter-title} | {page-number}'
+  verso:
+    right:
+      content: $footer_recto_right_content
+    left:
+      content: ''

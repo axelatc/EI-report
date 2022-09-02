@@ -1,0 +1,44 @@
+Field|Definition|Type|Nullable|Default Value|PK|FK|AI|UNS|UNI|Definition domain and constraints
+
+user_id|numéro unique, identifiant de la table|INT(11)|||x||x|x|| > 0
+first_name|prénom|VARCHAR(100)||||||||min. 1 character
+last_name|nom|VARCHAR(100)||||||||min. 1 character
+username|nom d'utilisateur, l'identifiant de connexion|VARCHAR(100)||||||||min. 1 character
+password|mot de passe|VARCHAR(255)||||||||Limite pour l'utilisateur: 6 à 255 caractères, avec une minuscule, une majuscule et un symbole parmi @#$%
+birthdate|date de naissance|DATE||||||||>= 1 janvier 1900 et <= aujourd'hui
+gender|genre|ENUM||OTHER||||||MALE, FEMALE, OTHER
+email_address|adresse e-mail|VARCHAR(255)|||||||x|respecte une expression régulière qui restreint au format e-mail standard `nom@domaine`; minimum 3 caractères, ex: ""a@o"";maximum 254 caractères; unique"
+phone_number|numéro de téléphone|VARCHAR(16)||||||||respecte une expression régulière qui restreint au format de téléphone belge fixe ou gsm ; min 8, max 16 (préfixe ""+"" inclus); unique
+creation_date_time|date et heure de création du compte|DATETIME||NOW||||||antérieur ou égale à maintenant
+active|compte utilisateur est activé ou non|BOOLEAN||true||||||false or true
+
+[roles]|table des roles|||||||||
+
+role_id|numéro unique, identifiant de la table [roles]|INT(11)|||x||x|x|| > 0
+label|libellé|VARCHAR(100)||||||||"min. 1 char ; unique"
+description|description|VARCHAR(2000)||none|||||
+
+[roles_permissions]|table intermédiaire|||||||||
+
+role_permission_id|numéro unique, identifiant de la table [roles_permissions]|INT(11)|||x||x|x|| > 0
+role_id|numéro unique, identifiant de la table [roles]|INT(11)||||x||x||" > 0 ; unique avec permission_id"
+permission_id|numéro unique, identifiant de la table [permissions]|INT(11)||||x||x||" > 0 ; unique avec role_id"
+
+[permissions]|table des permissions|||||||||
+
+permission_id|numéro unique, identifiant de la table [permissions]|INT(11)|||x||x|x|| > 0
+label|libellé|VARCHAR(100)|||||||x|"min. 1 char ; unique"
+description|description|VARCHAR(2000)||NONE||||||min. 1 char
+
+|measures|une mesure numérique fitness||||||||||
+|user_id|clé de la table [users], représente l'utilisateur|INT(11)|x||x|x||x|null et >0||
+|measurand_id|clé de la table [measurands], représente le type de mesure|INT(11)|x||x|x||x|null et >0||
+|creation_date_time|instant d'encodage|DATETIME|||x||||> la date de création de l'utilisateur et granularité horaire à la milliseconde||
+|value|la valeur numérique|DOUBLE|||||||">= 0 et 5 décimales max après la virgule
+On ne permet pas de valeurs négatives car on ne journalise pas des deltas ou autres traitements statistiques avancés."||
+|note|note supplémentaire|TEXT|x||||||min. 1 char||
+
+|measurands|type de mesure (ex: tour de biceps)||||||||||
+|measurand_id|numéro unique, identifiant de la table|INT(11)|||x||x|x|> 0||
+|label|nom|VARCHAR(50)|||||||min. 1 char||
+|description|description|TEXT|x||||||min. 1 char||

@@ -1,0 +1,277 @@
+'Consulter mesurande
+     @startuml
+          skinparam ParticipantPadding 20
+          skinparam responseMessageBelowArrow true
+          skinparam maxMessageSize 300
+          '!theme spacelab
+          hide footbox
+          autonumber
+
+          actor "Utilisateur:Administrateur" as user
+          participant ":Interface" as interf
+          participant ":Mesurande" as system
+          participant ":DB" as db
+          title __"Utilisateur Administrateur"__: consulter un  mesurande
+          activate user
+                  activate interf
+                          activate system
+                                  activate db
+                                          user -> interf : demande la page de consultation d'un  mesurande
+                                          interf -> system : Envoie de la requête utilisateur
+                                          system -> db : obtention des permissions de l'utilisateur
+                                          db --> system : renvoie des permissions
+                                          system -> system : vérification des permissions
+                                          alt permissions insuffisantes
+                                                  system --> interf: permission insuffisante
+                                                  interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                                          else permissions suffisantes
+                                                  system --> interf: permission suffisante
+                                                  interf --> user : renvoie formulaire  pour consulter mesurande
+                                                  loop données non conformes ou mesurande n'existe pas dans la BD
+                                                          user -> interf:  soumettre formulaire
+                                                          interf -> system:  validation des données
+                                                          system -> system: validation du formulaire
+                                                          alt données du formulaire conformes au modèle business mesurande
+                                                                  system->db: vérification de l'existence préalable du  mesurande
+                                                                  alt mesurande existe
+                                                                          db-->system: mesurande existe
+
+
+                                                                                  system-->interf: réussite: le mesurande a été trouvé
+                                                                                  interf -> user: renvoie message "Le mesurande a été trouvé." + renvoie les détails du mesurande
+
+                                                                  else mesurande n'existe pas
+                                                                          db-->system: mesurande n'existe pas
+                                                                  deactivate db
+                                                                  destroy db
+                                                                  system-->interf: erreur: mesurande n'existe pas
+                                                                  interf -> user: renvoie message d'erreur "Ce mesurande n'existe pas." + formulaire pour consulter mesurande
+                                                          end
+                                                  else données non conformes
+                                                          system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                                  deactivate system
+                                                  destroy system
+                                                  interf --> user:  renvoie formulaire rempli pour éditer un  mesurande + un message d'erreur par champ invalide
+                                          deactivate user
+                                          destroy user
+                                  deactivate interf
+                                  destroy interf
+                          end
+                  end
+          end
+          @enduml
+
+
+'Créer mesurande
+@startuml
+     skinparam ParticipantPadding 20
+     skinparam responseMessageBelowArrow true
+     skinparam maxMessageSize 300
+     '!theme spacelab
+     hide footbox
+     autonumber
+
+     actor "Utilisateur:Administrateur" as user
+     participant ":Interface" as interf
+     participant ":Mesurande" as system
+     participant ":DB" as db
+     title __"Utilisateur Administrateur"__: créer un nouveau mesurande
+     activate user
+             activate interf
+                     activate system
+                             activate db
+                                     user -> interf : demande la page de création d'un nouveau mesurande
+                                     interf -> system : Envoie de la requête utilisateur
+                                     system -> db : obtention des permissions de l'utilisateur
+                                     db --> system : renvoie des permissions
+                                     system -> system : vérification des permissions
+                                     alt permissions insuffisantes
+                                             system --> interf: permission insuffisante
+                                             interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                                     else permissions suffisantes
+                                             system --> interf: permission suffisante
+                                             interf --> user : renvoie formulaire vide pour créer mesurande
+                                             loop données non conformes ou mesurande existe déjà dans la BD
+                                                     user -> interf:  soumettre formulaire rempli
+                                                     interf -> system:  validation des données
+                                                     system -> system: validation du formulaire
+                                                     alt données du formulaire conformes au modèle business mesurande
+                                                             system->db: vérification de l'unicité du nouveau mesurande
+                                                             alt mesurande est unique
+                                                                     db-->system: mesurande est unique
+                                                                     system->db: débute la transaction
+                                                                     system->db: exécute la modification
+                                                                     system->db: commit la transaction
+                                                                     alt transaction réussie
+                                                                             db-->system: transaction réussie
+                                                                             system-->interf: réussite: le mesurande a été sauvegardé
+                                                                             interf -> user: renvoie message "Le mesurande a été sauvegardé." + renvoie formulaire vide pour créer mesurande
+                                                                     else transaction échouée
+                                                                             db-->system: transaction refusée
+                                                                             system->db: rollback la modification
+                                                                             system-->interf: création du mesurande échouée
+                                                                             interf-->user: renvoie message d'erreur + formulaire rempli pour créer un nouveau mesurande
+                                                                     end
+                                                             else mesurande existe déjà
+                                                                     db-->system: mesurande existe déjà
+                                                             deactivate db
+                                                             destroy db
+                                                             system-->interf: erreur: mesurande existe déjà
+                                                             interf -> user: renvoie message d'erreur "Ce mesurande existe déjà." + formulaire rempli pour créer un nouveau mesurande
+                                                     end
+                                             else données non conformes
+                                                     system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                             deactivate system
+                                             destroy system
+                                             interf --> user:  renvoie formulaire rempli pour créer un nouveau mesurande + un message d'erreur par champ invalide
+                                     deactivate user
+                                     destroy user
+                             deactivate interf
+                             destroy interf
+                     end
+             end
+     end
+     @enduml
+
+     'Éditer mesurande
+     @startuml
+          skinparam ParticipantPadding 20
+          skinparam responseMessageBelowArrow true
+          skinparam maxMessageSize 300
+          '!theme spacelab
+          hide footbox
+          autonumber
+
+          actor "Utilisateur:Administrateur" as user
+          participant ":Interface" as interf
+          participant ":Mesurande" as system
+          participant ":DB" as db
+          title __"Utilisateur Administrateur"__: éditer un  mesurande
+          activate user
+                  activate interf
+                          activate system
+                                  activate db
+                                          user -> interf : demande la page d'édition d'un  mesurande
+                                          interf -> system : Envoie de la requête utilisateur
+                                          system -> db : obtention des permissions de l'utilisateur
+                                          db --> system : renvoie des permissions
+                                          system -> system : vérification des permissions
+                                          alt permissions insuffisantes
+                                                  system --> interf: permission insuffisante
+                                                  interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                                          else permissions suffisantes
+                                                  system --> interf: permission suffisante
+                                                  interf --> user : renvoie formulaire  pour éditer mesurande
+                                                  loop données non conformes ou mesurande n'existe pas dans la BD
+                                                          user -> interf:  soumettre formulaire rempli
+                                                          interf -> system:  validation des données
+                                                          system -> system: validation du formulaire
+                                                          alt données du formulaire conformes au modèle business mesurande
+                                                                  system->db: vérification de l'existence préalable du  mesurande
+                                                                  alt mesurande existe
+                                                                          db-->system: mesurande existe
+                                                                          system->db: débute la transaction
+                                                                          system->db: exécute la modification
+                                                                          system->db: commit la transaction
+                                                                          alt transaction réussie
+                                                                                  db-->system: transaction réussie
+                                                                                  system-->interf: réussite: le mesurande a été sauvegardé
+                                                                                  interf -> user: renvoie message "Le mesurande a été sauvegardé." + renvoie formulaire  pour éditer mesurande
+                                                                          else transaction échouée
+                                                                                  db-->system: transaction refusée
+                                                                                  system->db: rollback la modification
+                                                                                  system-->interf: édition du mesurande échouée
+                                                                                  interf-->user: renvoie message d'erreur + formulaire rempli pour éditer un  mesurande
+                                                                          end
+                                                                  else mesurande n'existe pas
+                                                                          db-->system: mesurande n'existe pas
+                                                                  deactivate db
+                                                                  destroy db
+                                                                  system-->interf: erreur: mesurande n'existe pas
+                                                                  interf -> user: renvoie message d'erreur "Ce mesurande n'existe pas." + formulaire rempli pour éditer un  mesurande
+                                                          end
+                                                  else données non conformes
+                                                          system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                                  deactivate system
+                                                  destroy system
+                                                  interf --> user:  renvoie formulaire rempli pour éditer un  mesurande + un message d'erreur par champ invalide
+                                          deactivate user
+                                          destroy user
+                                  deactivate interf
+                                  destroy interf
+                          end
+                  end
+          end
+          @enduml
+
+
+          'Supprimer mesurande
+               @startuml
+                    skinparam ParticipantPadding 20
+                    skinparam responseMessageBelowArrow true
+                    skinparam maxMessageSize 300
+                    '!theme spacelab
+                    hide footbox
+                    autonumber
+
+                    actor "Utilisateur:Administrateur" as user
+                    participant ":Interface" as interf
+                    participant ":Mesurande" as system
+                    participant ":DB" as db
+                    title __"Utilisateur Administrateur"__: supprimer un  mesurande
+                    activate user
+                            activate interf
+                                    activate system
+                                            activate db
+                                                    user -> interf : demande la page de suppression d'un  mesurande
+                                                    interf -> system : Envoie de la requête utilisateur
+                                                    system -> db : obtention des permissions de l'utilisateur
+                                                    db --> system : renvoie des permissions
+                                                    system -> system : vérification des permissions
+                                                    alt permissions insuffisantes
+                                                            system --> interf: permission insuffisante
+                                                            interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                                                    else permissions suffisantes
+                                                            system --> interf: permission suffisante
+                                                            interf --> user : renvoie formulaire  pour supprimer mesurande
+                                                            loop données non conformes ou mesurande n'existe pas dans la BD
+                                                                    user -> interf:  soumettre formulaire rempli
+                                                                    interf -> system:  validation des données
+                                                                    system -> system: validation du formulaire
+                                                                    alt données du formulaire conformes au modèle business mesurande
+                                                                            system->db: vérification de l'existence préalable du  mesurande
+                                                                            alt mesurande existe
+                                                                                    db-->system: mesurande existe
+                                                                                    system->db: débute la transaction
+                                                                                    system->db: exécute la modification
+                                                                                    system->db: commit la transaction
+                                                                                    alt transaction réussie
+                                                                                            db-->system: transaction réussie
+                                                                                            system-->interf: réussite: le mesurande a été supprimé
+                                                                                            interf -> user: renvoie message "Le mesurande a été supprimé." + renvoie formulaire  pour supprimer mesurande
+                                                                                    else transaction échouée
+                                                                                            db-->system: transaction refusée
+                                                                                            system->db: rollback la modification
+                                                                                            system-->interf: suppression du mesurande échouée
+                                                                                            interf-->user: renvoie message d'erreur + formulaire rempli pour supprimer un  mesurande
+                                                                                    end
+                                                                            else mesurande n'existe pas
+                                                                                    db-->system: mesurande n'existe pas
+                                                                            deactivate db
+                                                                            destroy db
+                                                                            system-->interf: erreur: mesurande n'existe pas
+                                                                            interf -> user: renvoie message d'erreur "Ce mesurande n'existe pas." + formulaire rempli pour supprimer un  mesurande
+                                                                    end
+                                                            else données non conformes
+                                                                    system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                                            deactivate system
+                                                            destroy system
+                                                            interf --> user:  renvoie formulaire rempli pour supprimer un  mesurande + un message d'erreur par champ invalide
+                                                    deactivate user
+                                                    destroy user
+                                            deactivate interf
+                                            destroy interf
+                                    end
+                            end
+                    end
+                    @enduml

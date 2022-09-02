@@ -1,0 +1,2475 @@
+// this template is taken from: https://github.com/asciidoctor/asciidoctor-pdf/tree/main/examples
+
+////
+Only way to generate the pdf from mvn is to do:
+at root of project, run
+`mvnw.cmd clean install` to install all dependencies and making sure the application is running
+`mvnw.cmd generate-resources` to start an auto-refresh process which listens to any changes on the /src/docs/asciidoc/*.adoc files
+
+`mvnw.cmd clean` is useful to remove all the output files generated under \target\
+Open the output pdf file under /target/generated-docs/xxx.pdf in your browser
+When you save the xxx.adoc file, auto-refresh process will rebuild the xxx.pdf
+The re-build takes approximately 25 seconds
+
+Past experiments
+`mvnw.cmd asciidoctor:process-asciidoc`: 8 secs build, doesn't generate the pdf after mvn clean, only the html
+or `mvnw.cmd generate-resources`: 32 secs build, generate the pdf after mvn clean
+or `mvnw.cmd asciidoctor:process-asciidoc@generate-pdf-doc`: 40secs build, generate the pdf after mvn clean
+the maven build should display "BUILD SUCCESS" and the pdf is available at `target/generated-docs/`
+
+////
+= TFE: App Web SHAPP
+:notitle:
+:author: AK
+//:doctype: book
+// Settings:
+:pdf-page-layout: portrait
+:reproducible:
+:icons: font
+:listing-caption: Listing
+:table-caption: Table
+:table-stripes: even
+:imagesdir: ./images
+//:!chapter-signifier:
+:chapter-refsig: Chapitre
+:section-refsig: Section
+:appendix-refsig: Annexe
+:mmdc: ./node_modules/.bin/mmdc
+:sectanchors:
+:sectnums:
+:sectnumlevels: 5
+:hardbreaks-option:
+:idprefix:
+:idseparator: -
+:toc: auto
+:toclevels: 4
+:toc-title: Table des matières
+:xrefstyle: full
+:pdf-themesdir: {docdir}
+:pdf-theme: tfe.yml
+//TODO: create my own cover page
+:front-cover-image: image:cover.png[]
+//:pdf-page-layout: landscape
+:source-highlighter: coderay
+
+== Révisions
+
+[cols=4,frame=ends,grid=rows]
+|===
+|Version & Date |Nom de l'auteur |Sections |Modifications
+
+|v1.0
+20/01/2022
+|KREBS Axel
+QUAIRIA William
+|Toutes
+|1ère version du document
+Élaboration de la structure globale du rapport
+
+|v1.1
+25/01/2022
+|KREBS Axel
+QUAIRIA William
+|1-Introduction
+2-Formalisation du besoin
+|Création et rédaction
+
+|v1.2
+08/02/2022
+|KREBS Axel
+QUAIRIA William
+|Description des fonctionnalités
+Description des flux
+|Détail des fonctionnalités
+Ajout de diagrammes et explication des flux
+
+|v1.3
+09/03/2022
+|KREBS Axel
+QUAIRIA William
+|3-Cahier de charges détaillé
+4-Spécifications techniques
+|Création et rédaction
+
+
+|v1.4
+15/04/2022
+|KREBS Axel
+QUAIRIA William
+|9-Fonctionnalités
+|Création et rédaction
+
+|v1.5
+03/06/2022
+|KREBS Axel
+|Toutes
+|Remaniement complet
+Suppression des parties de William (abandon)
+|===
+
+
+== Introduction
+
+Ce travail de fin d’études a pour objectif de concevoir un projet viable en collaboration.
+
+Pour ce faire, nous devons mettre en pratique la théorie et les compétences acquises tout au long de notre cursus.
+Le travail en équipe permet d’exploiter les compétences de chacun au service du collectif.
+
+Cela nous permet d’être mis en situation professionnelle, de répondre aux exigences demandées dans un temps imparti dans l’optique de créer un projet viable fonctionnel et qui reflète notre expertise.
+
+Ce document a donc pour finalité d’être le support retranscrivant l’entièreté de l’analyse et de l’implémentation du projet d’application sportive nommée “Shapp”.
+Il contiendra les besoins formulés par la société cliente, la traduction de ces derniers en vue d’y répondre via les techniques choisies, ainsi que l’ensemble des schémas d’analyse et des écrans de l’implémentation.
+
+Ce document est destiné :
+- au client, dans un premier temps, à des fins de validation,
+- aux programmeurs à des fins d’implémentation,
+- à l'équipe pédagogique à des fins d’évaluation
+- aux utilisateurs finaux de l’application.
+
+=== Contexte du projet
+La réalisation de ce projet s’inscrit dans le cadre d’un travail de fin d’études.
+
+S’agissant d’un nouveau développement applicatif, ce projet nous donne l’opportunité de mettre en pratique nos connaissances et compétences acquises lors de nos différents cours et stages, en vue de réaliser une application dont le thème principal est le secteur sportif.
+
+=== Client
+Pour des raisons évidentes de confidentialité, nous utiliserons la dénomination fictive de “FitCorp” en référence à notre société cliente.
+
+
+=== Choix du projet
+Au cours de la crise du covid, suite à la fermeture générale imposée, beaucoup de sportifs se sont retrouvés orphelins de leurs salles et clubs de sport.
+Les habitudes d’entraînement, les équipements ainsi que le matériel accessible ont été profondément altérés.
+
+L’objectif, faisant suite à un appel d’offre lancé par FitCorp, est de fournir une alternative conséquente aux applications traditionnelles de programmation sportive en vue de répondre à des besoins jusqu’ici  insatisfaits qui se sont vus renforcés par la crise du Covid.
+La société cliente s’occupera de la mise sur le marché et de la commercialisation des différents plans
+d’abonnements à cette nouvelle application.
+
+== Les techniques
+=== Les outils de développement
+//TODO: Ajouter les versions exactes aux librairies
+Nous allons réaliser une application “hub” sportif faite à l’aide des technologies suivantes.
+
+.Back-end
+- Java 8+
+- Tomcat 9
+- Maven 3+
+- Librairies Java: Log4J / SLF4J, Lombok, JUnit, Mockito, Hibernate 4.0
+- Spring: Spring Boot, Spring Web (MVC + Rest services), Spring Data JPA, Spring HATEOAS, Spring Rest Repositories, Spring Security
+- MySQL 8.0+
+
+.Front-end
+- HTML5, CSS3, Javascript 11 (ES2020)
+- Thymeleaf
+- Angular 10+
+- Typescript
+- Angular Material
+- Librairies Javascript: DayJS, Lodash, jQuery 3+, Boostrap 4+
+
+.Autres
+- Windows 10
+- IntelliJ IDEA Ultimate
+- Git
+- Google Chrome
+
+=== Le matériel
+==== Infrastructure pour l’application et la base de données
+Le datacenter doit se situer en Europe pour respecter le RGPD (Règlement Général sur la Protection des Données) et proche de la Belgique pour une meilleure efficacité (législation, rapidité, maintenance, service client).
+
+OVH nous permettant de choisir la France, nous nous tournerons vers lui.
+Notre client devra souscrire la location de 2 serveurs dédiés sous Linux ainsi qu’une base de données privative auprès de l’hébergeur OVH:
+
+Serveur applicatif{empty}footnote:[Tous nos serveurs dédiés. (01/06/2022). OVH. https://www.ovh.com/fr/serveurs_dedies/advance/tarifs/.]:
+
+* Processeur : Intel Xeon-D 2123IT - 4 c / 8 t - 2.2 GHz / 3 GHz
+* Mémoire : 32Go DDR4 ECC 2400MHz
+* Disque : 2x500Go SSD NVMe Soft RAID
+* Bande passante: le trafic entrant et sortant est illimité et gratuit
+* France
+* 75,59 EUR/mois TTC
+
+Serveur base de données{empty}footnote:[Cloud Databases. (01/06/2021). OVH. https://www.ovh.com/fr/cloud-databases/.]:
+
+* 4GO ram 64 GO Stockage
+* 47,99EUR/mois TTC
+
+Le serveur applicatif hébergeant l’application sera accessible par Internet afin que les utilisateurs puissent
+utiliser l’application depuis n’importe quel appareil connecté au réseau public.
+
+Nous utiliserons des serveurs privatifs et non virtualisés afin d’avoir un contrôle total des ressources des
+serveurs.
+
+Nous devons réserver un nom de domaine belge (.be) pour notre application.
+
+==== Base de données
+Nous séparerons l’hébergement de la base de données et de l’application par souci de sécurité: si l’application est compromise, la base de données a plus de chance de garder son intégrité.
+
+Nous avons opté pour une base de données unique afin de faciliter le maintien de l’intégrité des données ainsi que la réalisation de back-up.
+Afin de faire des économies sur la location et la maintenance, nous décidons de ne pas répliquer la base de données.
+
+Nous avons opté pour une base de données hébergée par OVH (Cloud Database).
+La maintenance et la mise à jour du système d’exploitation et du moteur de base de données sont entièrement gérées par OVH.
+Des sauvegardes de la base de donnée sont aussi effectuées toutes les 24 heures et sont disponibles depuis l’Espace Client.
+
+== Analyse
+=== Cahier des charges fonctionnel
+
+////
+==== Les outils de développement
+Section en doublon dans canevas "Pour tous les projets.pdf" de Lawarée
+////
+
+==== Déterminer un contexte et rechercher le problème des utilisateurs
+
+Le projet est de créer un logiciel de type "hub" sportif dont la fonctionnalité phare est la gestion de ses relevés physiques et de performance par l'utilisateur.
+Le développement débutera en février et se terminera en octobre 2022.
+Un unique développeur est affecté à cette tâche: Axel Krebs.
+
+===== Les contraintes techniques
+Deux langues doivent être supportées par l'application: le français et l'anglais.
+L'application web devra être testée et développée pour les navigateurs Google Chrome et Microsoft Edge
+
+===== Les contraintes légales et réglementaires
+//TODO: fix RGPD footnote
+L'application hébergeant des données personnelles, elle devra être conforme juridiquement au RGPD.{empty}footnote:[Règlement général sur la protection des données. Relatif à la protection des personnes physiques à l'égard du traitement des données à caractère personnel et à la libre circulation de ces données.]
+
+
+===== Les contraintes logistiques
+Le développeur a besoin des conditions suivantes pour  mener le projet à bien:
+
+- Un local spacieux, aéré, lumineux, calme et disposant d'une installation électrique, d'une connexion internet puissante et de toilettes
+- 1 ordinateur portable, 1 bureau, 1 chaise, 2 écrans, 1 souris, 1 clavier
+
+==== Définir les limites et les rôles du projet
+===== Rôles
+. Visiteur non authentifié
+. Utilisateur
+. Administrateur
+
+===== Permissions
+
+Les permissions sont héritées du haut vers le bas.
+
+. Visiteur
+* Consulter la page d’accueil promotionnelle
+* Se connecter
+* Se créer un compte
+
+. Utilisateur
+* Se déconnecter
+* Consulter son tableau de bord
+* Édition de ses informations de compte
+* Suppression de son compte
+* Consulter tous les relevés
+* Créer, consulter, éditer et supprimer un relevé
+
+. Administrateur
+* Il a toutes les permissions
+* Créer, consulter, éditer et supprimer un compte utilisateur
+* Attribuer/retirer un rôle à un utilisateur
+* Consulter les permissions
+* Créer, éditer un rôle et lui attribuer/retirer des permissions
+* Supprimer un rôle uniquement si celui-ci n'est associé à aucun utilisateur
+* Créer, consulter, éditer et supprimer un mesurande
+
+===== Nombre d'utilisateur
+Nous ne dépasserons pas le nombre de mille utilisateurs dans la première année consécutive au lancement de l'application.
+
+===== Pays
+L'application est destinée à la Belgique.
+
+==== Description fonctionnelle des besoins
+NOTE: Pour toute donnée devant être encodée par l'utilisateur, vous trouverez dans <<dictionnaire-des-données>> les conditions et restrictions appliquées à cette donnée.
+
+===== Page de promotion
+Le visiteur non authentifié découvre l'application par la page de promotion.
+Sur celle-ci, il peut consulter les fonctionnalités de l'application. Elle contient également 2 boutons: l'un pour se créer un compte, le 2e pour se connecter à son compte.
+
+===== Page d'enregistrement
+Le bouton "Se créer un compte" redirige le visiteur vers un formulaire où il doit encoder son e-mail, mot de passe, nom d’utilisateur unique, prénom, nom, date de naissance, genre.
+D'autres informations facultatives peuvent être ajoutées à ce formulaire.
+Il soumet le formulaire. Si celui-ci est validé par le système, l'utilisateur est authentifié et redirigé vers le tableau de bord de l'application.
+
+===== Page de connexion
+Le bouton "Se connecter" redirige le visiteur vers le formulaire de connexion.
+Pour accéder à l'application il doit encoder son nom d'utilisateur et son mot de passe.
+Il soumet le formulaire puis est redirigé vers le tableau de bord de l'application.
+
+===== Le tableau de bord
+La page d'accueil de l'application.
+Il peut y figurer un message de bienvenue.
+L'utilisateur peut y consulter ses derniers relevés.
+
+===== Le bouton de déconnexion
+L'utilisateur peut se déconnecter de l'application.
+Pour ceci, il dispose d'un bouton "se déconnecter" dans le menu.
+Lorsqu'il clique dessus, un message de confirmation lui demande s'il souhaite vraiment se déconnecter.
+S'il confirme, il est déconnecté de l'application et est redirigé vers la page de connexion.
+
+===== Gestion du compte personnel
+Tout utilisateur dispose d'un menu pour gérer son compte personnel.
+Il peut consulter et éditer les informations qu'il a encodées lors de la création de son compte sauf son adresse e-mail.
+Un formulaire lui permet de modifier de son mot de passe.
+L'utilisateur doit remplir 3 champs: l'ancien mot de passe, le nouveau mot de passe, confirmer le nouveau mot de passe.
+
+L'utilisateur peut supprimer son compte.
+Un message d'avertissement lui demande de confirmer la suppression du compte.
+L'opération est définitive, il ne pourra en aucun cas récupérer son compte ultérieurement ou se connecter avec ses identifiants.
+Ceci est une suppression logique, le compte de l'utilisateur, bien que désactivé, est toujours entier dans la base de données.
+
+===== Journal de relevés
+Cette fonctionnalité répond au besoin de l'utilisateur de garder un journal de ses relevés, comme le relevé hebdomadaire du poids en kg ou celui du tour de biceps en centimètre.
+Un relevé est par exemple "33 cm de tour de biceps en cm le 01/06/2022: mesure après 4 heures de jeun".
+Un relevé comprend une valeur (33), est associé à un mesurande ("tour de biceps en cm"), a une date/heure de relevé (le 01/06/2022) et peut contenir une note supplémentaire ("mesure après 4 heures de jeun").
+
+====== Gestion des mesurandes par l'administrateur
+L'administrateur peut créer, consulter, éditer ou supprimer des mesurandes tels que "tour du biceps en cm" et "indice de masse graisse (IMG) en pourcent" via une vue en tableau.
+Il ne peut supprimer un mesurande que si AUCUN utilisateur n'y a associé un relevé.
+Les utilisateurs ne peuvent pas éditer les mesurandes.
+
+====== Gestion des relevés par l'utilisateur
+Tout utilisateur peut consulter l'évolution d'un mesurande sous la forme d'un graphique en courbe de niveau avec une dimension temporelle.
+Il peut supprimer ou éditer ses relevés sous forme d'un tableau avec des en-têtes de tri et des boutons d'actions.
+
+Il peut rechercher des relevés via une barre de recherche.
+L'utilisateur peut rechercher un relevé parmi les relevés affichés dans un tableau listant tous les relevés d'un mesurande.
+Par exemple, l'utilisateur consulte le tableau de relevés pour le le mesurande "tour de biceps en centimètre".
+Il dispose d'un champ de recherche où il peut encoder un texte libre. Les relevés affichées dans le tableau affichées seront alors les relevés qui contiennent ce texte dans un de leurs champs textuels.
+Si aucun relevé ne correspond à cette recherche, un message d'avertissement sera affiché à l'utilisateur.
+
+===== Gestion des comptes utilisateur
+L'administrateur peut créer, éditer ou supprimer tout compte utilisateur, excepté les autres comptes administrateur.
+Cette vue se présente sous forme d'un tableau avec des en-têtes de tri et des boutons d'actions pour chaque utilisateur.
+La suppression d'un compte utilisateur via cette vue est identique à la suppression de la fonctionnalité <<gestion-du-compte-personnel>>.
+
+===== Gestion des rôles et permissions
+L'administrateur peut créer, éditer ou supprimer tout rôle, excepté celui d'administrateur.
+Il ne peut supprimer un rôle uniquement si ce dernier n'est assigné à aucun utilisateur.
+Il peut assigner ou retirer une permission d'un rôle.
+Il ne peut pas modifier les permissions.
+Le rôle d'administrateur et les permissions assignées sont uniquement modifiables par un développeur manuellement.
+
+==== Planification du projet
+Il n’y a pas de contraintes. Le client n’a pas donné de date limite de livraison.
+
+=== Les rôles et permissions
+Cf. <<définir-les-limites-et-les-rôles-du-projet>>
+
+=== Les cas d'utilisation
+.Les cas d'utilisation
+[plantuml,target=usecase-global,format=png]
+....
+@startuml
+'!theme plain
+'skinparam linetype ortho
+'skinparam monochrome true
+'skinparam shadowing false
+'skinparam defaultFontSize 22
+'scale 2
+left to right direction
+
+actor Visiteur as visi
+actor Utilisateur as util
+actor Administrateur as admin
+
+(Gère) as gere
+(S'inscrire) as inscription
+(Se connecter) as connecter
+(Visiter page promotionelle) as pagePromo
+(Compte personnel) as comptePerso
+(Se déconnecter) as deconnecter
+(Consulter Tableau de bord) as tableauBord
+(Relevés) as relevés
+
+(Gère) as gereadmin
+(Comptes utilisateur) as comptes
+(Rôles) as rôles
+(Mesurandes) as mesurandes
+
+util -left--|> visi
+admin -left--|> util
+
+visi --> pagePromo
+visi --> inscription
+visi --> connecter
+
+
+util --> deconnecter
+util --> tableauBord
+
+util ..> gere : communicate
+'Gestion du compte personnel
+gere <.. comptePerso : extends
+comptePerso <.. (Consulter compte) : extends
+comptePerso <.. (Editer compte) : extends
+comptePerso <.. (Supprimer compte) : extends
+
+'Gestion des relevés
+gere <.. relevés : extends
+relevés <.. (Rechercher relevé) : extends
+relevés <.. (Créer relevé) : extends
+(Créer relevé) <.. (Assigner un mesurande) : extends
+(Editer relevé) <.. (Assigner un mesurande) : extends
+relevés <.. (Consulter relevé) : extends
+relevés <.. (Editer relevé) : extends
+relevés <.. (Supprimer relevé) : extends
+
+
+admin ..> gereadmin : communicate
+
+'Gestion des comptes utilisateur
+gereadmin <.. comptes : extends
+comptes <.. (Créer utilisateur) : extends
+comptes <.. (Consulter utilisateur) : extends
+comptes <.. (Editer utilisateur) : extends
+comptes <.. (Supprimer utilisateur) : extends
+
+'Gestion des mesurandes
+gereadmin <.. mesurandes : extends
+mesurandes <.. (Créer mesurande) : extends
+mesurandes <.. (Consulter mesurande) : extends
+mesurandes <.. (Editer mesurande) : extends
+mesurandes <.. (Supprimer mesurande) : extends
+
+'Gestion des rôles
+gereadmin <.. rôles : extends
+rôles <.. (Créer rôle) : extends
+rôles <.. (Consulter rôle) : extends
+rôles <.. (Editer rôle) : extends
+rôles <.. (Supprimer rôle) : extends
+(Créer rôle) <.. (Assigner/Retirer une permission) : extends
+(Editer rôle) <.. (Assigner/Retirer une permission) : extends
+@enduml
+....
+
+//TODO: faire les uses cases textuels
+
+=== TODO: Le modèle conceptuel de données (MCD)
+//TODO: trouver un composant qui s'affiche en cercle/arrondi
+.Le modèle conceptuel de données (MCD)
+[plantuml,target=mcd,format=svg]
+....
+@startuml
+skinparam useBetaStyle true
+' style enclosure declaration
+<style>
+' scope to classDiagram elements
+objectDiagram {
+
+' define a new style, using CSS class syntax
+     class {
+        RoundCorner 35
+     }
+    }
+}
+</style>
+
+interface have as "Have" {}
+class User {}
+class Role {}
+
+User "0..*" -- have
+have "1" -- Role
+
+@enduml
+....
+
+[plantuml]
+....
+@startuml
+skinparam useBetaStyle true
+' style enclosure declaration
+<style>
+' scope to sequenceDiagram elements
+classDiagram {
+
+' define a new style, using CSS class syntax
+     .number2 {
+        BackgroundColor  #Green
+        RoundCorner 25
+     }
+    }
+}
+</style>
+
+entity Test2 <<number2>>
+@enduml
+....
+
+=== Le modèle logique des données (MLD)
+.Le modèle logique des données (MLD)
+[plantuml,target=mld,format=svg]
+....
+@startuml
+hide empty methods
+hide circle
+
+left to right direction
+'skinparam linetype ortho
+
+!define PKey <size:12></size><b><u>
+!define FKey <size:12></size><b>
+
+class "users" as users {
+    PKey PK user_id
+    FKey FK1 role_id
+    --
+    first_name
+    last_name
+    username
+    password
+    birthdate
+    gender
+    email_address
+    creation_date_time
+    active
+}
+
+together {
+    class "roles" as roles {
+        PKey PK role_id
+        --
+        label
+        description
+    }
+
+    class "roles_permissions" as roles_perms {
+        PKey FK1,PK role_id
+        PKey FK2,PK permission_id
+    }
+
+    class "permissions" as perms {
+        PKey PK permission_id
+        --
+        label
+    }
+}
+
+together {
+    class "measures" as measures {
+        PKey FK1,PK user_id
+        PKey FK2,PK measurand_id
+        PKey PK creation_date_time
+        --
+        value
+        note
+    }
+
+    class "measurands" as measurands {
+        PKey PK measurand_id
+        --
+        label
+    }
+}
+
+
+roles::role_id -->  users::role_id
+roles::role_id --> roles_perms::role_id
+perms::permission_id --> roles_perms::permission_id
+
+users::user_id --> measures::user_id
+measurands::measurand_id --> measures::measurand_id
+
+@enduml
+....
+
+=== Diagramme de classe
+.Diagramme de classe
+[plantuml,target=diagclasses,format=svg]
+....
+@startuml
+hide empty methods
+
+'left to right direction
+skinparam linetype ortho
+skinparam classAttributeIconSize 0
+
+class "User" as user {
+    - user_id: Integer
+    - role_id: Integer
+    - first_name: String
+    - last_name: String
+    - username: String
+    - password: String
+    - birthdate: String
+    - gender: String
+    - email_address: String
+    - creation_date_time: Datetime
+    - active: Boolean
+    --
+    + gettersAndSetters()
+    + create(User): User
+    + read(User): User
+    + update(User): User
+    + delete(User): User
+}
+
+    class "Role" as role {
+        - role_id: Integer
+        - label: String
+        - description: String
+        --
+        + gettersAndSetters()
+        + create(Role): Role
+        + read(Role): Role
+        + update(Role): Role
+        + delete(Role): Role
+    }
+
+    class "RolePermission" as role_perm {
+        - role_id: Integer
+        - permission_id: Integer
+        --
+        + create(RolePermission): RolePermission
+        + read(RolePermission): RolePermission
+        + update(RolePermission): RolePermission
+        + delete(RolePermission): RolePermission
+    }
+
+    class "Permission" as perm {
+        - permission_id: Integer
+        - label: String
+        --
+        + read(Permission): Permission
+    }
+
+together {
+    class "Measure" as measure {
+        - user_id: Integer
+        - measurand_id: Integer
+        - creation_date_time: Datetime
+        - value: Double
+        - note: String
+        --
+        + gettersAndSetters()
+        + create(Measure): Measure
+        + read(Measure): Measure
+        + update(Measure): Measure
+        + delete(Measure): Measure
+        + searchMeasure(String): Measure
+    }
+
+    class "Measurand" as measurand {
+        - measurand_id: Integer
+        - label: String
+        --
+        + create(Measurand): Measurand
+        + read(Measurand): Measurand
+        + update(Measurand): Measurand
+        + delete(Measurand): Measurand
+    }
+}
+
+user "0..*" -- "1" role : has >
+role "0..*" -- "0..*" perm : is allowed to >
+(role, perm) .. role_perm
+user "1" -- "0..*" measure : encodes >
+measure "0..*" -- "1" measurand : is of >
+
+@enduml
+....
+
+=== Dictionnaire des données
+//TODO: faire en sorte que les tables s'affichent en landscape ou que le format soit lisible
+
+==== Table des utilisateurs
+[caption="Table des utilisateurs", cols="2,5,2,1,2,1,1,1,1,1,5", stripes=even, frames=ends, grid=cols, options="header, breakable, rotate", width=100%]
+|===
+|Field|Definition|Type|Nullable|Default Value|PK|FK|AI|UNS|UNI|Definition domain and constraints
+|user_id|numéro unique, identifiant de la table|INT(11)|||x||x|x|| > 0
+|role_id|clé de la table [roles], représente le role|INT(11)|x||x|x||x|null et >0|
+|first_name|prénom|VARCHAR(100)||||||||min. 1 character
+|last_name|nom|VARCHAR(100)||||||||min. 1 character
+|username|nom d'utilisateur, l'identifiant de connexion|VARCHAR(100)||||||||min. 1 character
+|password|mot de passe|VARCHAR(255)||||||||Limite pour l'utilisateur: 6 à 255 caractères, avec une minuscule, une majuscule et un symbole parmi @#$%
+|birthdate|date de naissance|DATE||||||||>= 1 janvier 1900 et <= aujourd'hui
+|gender|genre|ENUM||OTHER||||||MALE, FEMALE, OTHER
+|email_address|adresse e-mail|VARCHAR(255)|||||||x|respecte une expression régulière qui restreint au format e-mail standard "nom@domaine"; minimum 3 caractères, ex: ""a@o"";maximum 254 caractères; unique"
+|creation_date_time|date et heure de création du compte|DATETIME||NOW||||||antérieure ou égale à maintenant
+|active|compte utilisateur est activé ou non|BOOLEAN||true||||||false or true
+
+|TABLE ROLES||||||||||
+|role_id|numéro unique, identifiant de la table [roles]|INT(11)|||x||x|x|| > 0
+|label|libellé|VARCHAR(100)||||||||min. 1 char ; unique
+|description|description|VARCHAR(2000)||none||||||
+
+|TABLE ROLES_PERMISSIONS||||||||||
+|role_permission_id|numéro unique, identifiant de la table [roles_permissions]|INT(11)|||x||x|x|| > 0
+|role_id|numéro unique, identifiant de la table [roles]|INT(11)||||x||x||> 0 ; unique avec permission_id
+|permission_id|numéro unique, identifiant de la table [permissions]|INT(11)||||x||x||> 0 ; unique avec role_id
+
+|TABLE PERMISSIONS||||||||||
+|permission_id|numéro unique, identifiant de la table [permissions]|INT(11)|||x||x|x|| > 0
+|label|libellé|VARCHAR(100)|||||||x|min. 1 char ; unique
+
+|TABLE MEASURES||||||||||
+|user_id|clé de la table [users], représente l'utilisateur|INT(11)|x||x|x||x|null et >0|
+|measurand_id|clé de la table [measurands], représente le type de mesure|INT(11)|x||x|x||x|null et >0|
+|creation_date_time|instant d'encodage|DATETIME|||x||||> la date de création de l'utilisateur et granularité horaire à la milliseconde|
+|value|la valeur numérique|DOUBLE|||||||>= 0 et 5 décimales max après la virgule|On ne permet pas de valeurs négatives car on ne journalise pas des deltas ou autres traitements statistiques avancés."
+|note|note supplémentaire|TEXT|x||||||min. 1 char|
+
+|TABLE MEASURANDS||||||||||
+|measurand_id|numéro unique, identifiant de la table|INT(11)|||x||x|x|> 0|
+|label|nom|VARCHAR(50)|||||||min. 1 char|
+|===
+
+=== TODO remove Rotated table
+
+[%rotate]
+|===
+|Cell in column 1, row 1
+|Cell in column 2, row 1
+
+|Cell in column 1, row 2
+|Cell in column 2, row 2
+|===
+
+omegalul test
+
+=== TODO remove Landscape table
+[orientation=landscape]
+|===
+|Cell in column 1, row 1
+|Cell in column 2, row 1
+
+|Cell in column 1, row 2
+|Cell in column 2, row 2
+|===
+
+[.landscape]
+=== TODO remove Landscape page
+
+=== Diagrammes de séquence
+==== Gestion du compte personnel
+.Consulter son compte personnel
+[plantuml,target=diagseq_utilisateur_consulterCompte,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Utilisateur" as user
+participant ":Interface" as interf
+participant ":User" as system
+participant ":DB" as db
+title __"Utilisateur Utilisateur"__: consulter un compte
+activate user
+      activate interf
+              activate system
+                      activate db
+                              user -> interf : demande la page de consultation du compte
+                              interf -> system : Envoie de la requête utilisateur
+                              system -> db : obtention des permissions de l'utilisateur
+                              db --> system : renvoie des permissions
+                              system -> system : vérification des permissions
+                              alt permissions insuffisantes
+                                      system --> interf: permission insuffisante
+                                      interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                              else permissions suffisantes
+                                      system --> interf: permission suffisante
+                                      interf --> user : renvoie formulaire  pour consulter compte
+                                      loop données non conformes ou compte n'existe pas dans la BD
+                                              user -> interf:  soumettre formulaire
+                                              interf -> system:  validation des données
+                                              system -> system: validation du formulaire
+                                              alt données du formulaire conformes au modèle business compte
+                                                      system->db: vérification de l'existence préalable du  compte
+                                                      alt compte existe
+                                                              db-->system: compte existe
+
+
+                                                                      system-->interf: réussite: le compte a été trouvé
+                                                                      interf -> user: renvoie message "Le compte a été trouvé." + renvoie les détails du compte
+
+                                                      else compte n'existe pas
+                                                              db-->system: compte n'existe pas
+                                                      deactivate db
+                                                      destroy db
+                                                      system-->interf: erreur: compte n'existe pas + expire la session
+                                                      interf -> user: renvoie message d'erreur "Ce compte n'existe pas." + redirige vers la page pour s'enregistrer
+                                              end
+                                      else données non conformes
+                                              system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                      deactivate system
+                                      destroy system
+                                      interf --> user:  renvoie formulaire rempli pour éditer un  compte + un message d'erreur par champ invalide
+                              deactivate user
+                              destroy user
+                      deactivate interf
+                      destroy interf
+              end
+      end
+end
+@enduml
+....
+.Éditer son compte personnel
+[plantuml,target=diagseq_utilisateur_editerCompte,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Utilisateur" as user
+participant ":Interface" as interf
+participant ":User" as system
+participant ":DB" as db
+title __"Utilisateur Utilisateur"__: éditer un  compte
+activate user
+      activate interf
+              activate system
+                      activate db
+                              user -> interf : demande la page d'édition du compte
+                              interf -> system : Envoie de la requête utilisateur
+                              system -> db : obtention des permissions de l'utilisateur
+                              db --> system : renvoie des permissions
+                              system -> system : vérification des permissions
+                              alt permissions insuffisantes
+                                      system --> interf: permission insuffisante
+                                      interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                              else permissions suffisantes
+                                      system --> interf: permission suffisante
+                                      interf --> user : renvoie formulaire  pour éditer compte
+                                      loop données non conformes ou compte n'existe pas dans la BD
+                                              user -> interf:  soumettre formulaire rempli
+                                              interf -> system:  validation des données
+                                              system -> system: validation du formulaire
+                                              alt données du formulaire conformes au modèle business compte
+                                                      system->db: vérification de l'existence préalable du  compte
+                                                      alt compte existe
+                                                              db-->system: compte existe
+                                                              system->db: débute la transaction
+                                                              system->db: exécute la modification
+                                                              system->db: commit la transaction
+                                                              alt transaction réussie
+                                                                      db-->system: transaction réussie
+                                                                      system-->interf: réussite: le compte a été sauvegardé
+                                                                      interf -> user: renvoie message "Le compte a été sauvegardé." + renvoie formulaire  pour éditer compte
+                                                              else transaction échouée
+                                                                      db-->system: transaction refusée
+                                                                      system->db: rollback la modification
+                                                                      system-->interf: édition du compte échouée
+                                                                      interf-->user: renvoie message d'erreur + formulaire rempli pour éditer un  compte
+                                                              end
+                                                      else compte n'existe pas
+                                                              db-->system: compte n'existe pas
+                                                      deactivate db
+                                                      destroy db
+                                                      system-->interf: erreur: compte n'existe pas + expire la session
+                                                      interf -> user: renvoie message d'erreur "Ce compte n'existe pas." + redirige vers la page pour s'enregistrer
+                                              end
+                                      else données non conformes
+                                              system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                      deactivate system
+                                      destroy system
+                                      interf --> user:  renvoie formulaire rempli pour éditer un  compte + un message d'erreur par champ invalide
+                              deactivate user
+                              destroy user
+                      deactivate interf
+                      destroy interf
+              end
+      end
+end
+@enduml
+....
+.Supprimer le compte utilisateur
+[plantuml,target=diagseq_utilisateur_supprCompte,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Utilisateur" as user
+participant ":Interface" as interf
+participant ":User" as system
+participant ":DB" as db
+title __"Utilisateur Utilisateur"__: supprimer un  compte
+activate user
+        activate interf
+                activate system
+                        activate db
+                                user -> interf : demande la page de suppression du compte
+                                interf -> system : Envoie de la requête utilisateur
+                                system -> db : obtention des permissions de l'utilisateur
+                                db --> system : renvoie des permissions
+                                system -> system : vérification des permissions
+                                alt permissions insuffisantes
+                                        system --> interf: permission insuffisante
+                                        interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                                else permissions suffisantes
+                                        system --> interf: permission suffisante
+                                        interf --> user : renvoie formulaire  pour supprimer compte
+                                        loop données non conformes ou compte n'existe pas dans la BD
+                                                user -> interf:  soumettre formulaire rempli
+                                                interf -> system:  validation des données
+                                                system -> system: validation du formulaire
+                                                alt données du formulaire conformes au modèle business compte
+                                                        system->db: vérification de l'existence préalable du  compte
+                                                        alt compte existe
+                                                                db-->system: compte existe
+                                                                system->db: débute la transaction
+                                                                system->db: exécute la modification
+                                                                system->db: commit la transaction
+                                                                alt transaction réussie
+                                                                        db-->system: transaction réussie
+                                                                        system-->interf: réussite: le compte a été supprimé + expire la session
+                                                                        interf -> user: renvoie message "Le compte a été supprimé." + redirige vers la page pour s'enregistrer
+                                                                else transaction échouée
+                                                                        db-->system: transaction refusée
+                                                                        system->db: rollback la modification
+                                                                        system-->interf: suppression du compte échouée
+                                                                        interf-->user: renvoie message d'erreur + formulaire rempli pour supprimer un  compte
+                                                                end
+                                                        else compte n'existe pas
+                                                                db-->system: compte n'existe pas
+                                                        deactivate db
+                                                        destroy db
+                                                        system-->interf: erreur: compte n'existe pas + expire la session
+                                                        interf -> user: renvoie message d'erreur "Ce compte n'existe pas." + redirige vers la page pour s'enregistrer
+                                                end
+                                        else données non conformes
+                                                system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                        deactivate system
+                                        destroy system
+                                        interf --> user:  renvoie formulaire rempli pour supprimer un  compte + un message d'erreur par champ invalide
+                                deactivate user
+                                destroy user
+                        deactivate interf
+                        destroy interf
+                end
+        end
+end
+@enduml
+....
+
+==== Gestion des mesurandes
+.Créer un mesurande
+[plantuml,target=diagseq_admin_creerMesurande,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Mesurande" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: créer un nouveau mesurande
+activate user
+     activate interf
+             activate system
+                     activate db
+                             user -> interf : demande la page de création d'un nouveau mesurande
+                             interf -> system : Envoie de la requête utilisateur
+                             system -> db : obtention des permissions de l'utilisateur
+                             db --> system : renvoie des permissions
+                             system -> system : vérification des permissions
+                             alt permissions insuffisantes
+                                     system --> interf: permission insuffisante
+                                     interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                             else permissions suffisantes
+                                     system --> interf: permission suffisante
+                                     interf --> user : renvoie formulaire vide pour créer mesurande
+                                     loop données non conformes ou mesurande existe déjà dans la BD
+                                             user -> interf:  soumettre formulaire rempli
+                                             interf -> system:  validation des données
+                                             system -> system: validation du formulaire
+                                             alt données du formulaire conformes au modèle business mesurande
+                                                     system->db: vérification de l'unicité du nouveau mesurande
+                                                     alt mesurande est unique
+                                                             db-->system: mesurande est unique
+                                                             system->db: débute la transaction
+                                                             system->db: exécute la modification
+                                                             system->db: commit la transaction
+                                                             alt transaction réussie
+                                                                     db-->system: transaction réussie
+                                                                     system-->interf: réussite: le mesurande a été sauvegardé
+                                                                     interf -> user: renvoie message "Le mesurande a été sauvegardé." + renvoie formulaire vide pour créer mesurande
+                                                             else transaction échouée
+                                                                     db-->system: transaction refusée
+                                                                     system->db: rollback la modification
+                                                                     system-->interf: création du mesurande échouée
+                                                                     interf-->user: renvoie message d'erreur + formulaire rempli pour créer un nouveau mesurande
+                                                             end
+                                                     else mesurande existe déjà
+                                                             db-->system: mesurande existe déjà
+                                                     deactivate db
+                                                     destroy db
+                                                     system-->interf: erreur: mesurande existe déjà
+                                                     interf -> user: renvoie message d'erreur "Ce mesurande existe déjà." + formulaire rempli pour créer un nouveau mesurande
+                                             end
+                                     else données non conformes
+                                             system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                     deactivate system
+                                     destroy system
+                                     interf --> user:  renvoie formulaire rempli pour créer un nouveau mesurande + un message d'erreur par champ invalide
+                             deactivate user
+                             destroy user
+                     deactivate interf
+                     destroy interf
+             end
+     end
+end
+@enduml
+....
+.Consulter un mesurande
+[plantuml,target=diagseq_admin_consulterMesurande,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Mesurande" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: consulter un  mesurande
+activate user
+     activate interf
+             activate system
+                     activate db
+                             user -> interf : demande la page de consultation d'un  mesurande
+                             interf -> system : Envoie de la requête utilisateur
+                             system -> db : obtention des permissions de l'utilisateur
+                             db --> system : renvoie des permissions
+                             system -> system : vérification des permissions
+                             alt permissions insuffisantes
+                                     system --> interf: permission insuffisante
+                                     interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                             else permissions suffisantes
+                                     system --> interf: permission suffisante
+                                     interf --> user : renvoie formulaire  pour consulter mesurande
+                                     loop données non conformes ou mesurande n'existe pas dans la BD
+                                             user -> interf:  soumettre formulaire
+                                             interf -> system:  validation des données
+                                             system -> system: validation du formulaire
+                                             alt données du formulaire conformes au modèle business mesurande
+                                                     system->db: vérification de l'existence préalable du  mesurande
+                                                     alt mesurande existe
+                                                             db-->system: mesurande existe
+
+
+                                                                     system-->interf: réussite: le mesurande a été trouvé
+                                                                     interf -> user: renvoie message "Le mesurande a été trouvé." + renvoie les détails du mesurande
+
+                                                     else mesurande n'existe pas
+                                                             db-->system: mesurande n'existe pas
+                                                     deactivate db
+                                                     destroy db
+                                                     system-->interf: erreur: mesurande n'existe pas
+                                                     interf -> user: renvoie message d'erreur "Ce mesurande n'existe pas." + formulaire pour consulter mesurande
+                                             end
+                                     else données non conformes
+                                             system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                     deactivate system
+                                     destroy system
+                                     interf --> user:  renvoie formulaire rempli pour éditer un  mesurande + un message d'erreur par champ invalide
+                             deactivate user
+                             destroy user
+                     deactivate interf
+                     destroy interf
+             end
+     end
+end
+@enduml
+....
+.Éditer un mesurande
+[plantuml,target=diagseq_admin_editerMesurande,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Mesurande" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: éditer un  mesurande
+activate user
+     activate interf
+             activate system
+                     activate db
+                             user -> interf : demande la page d'édition d'un  mesurande
+                             interf -> system : Envoie de la requête utilisateur
+                             system -> db : obtention des permissions de l'utilisateur
+                             db --> system : renvoie des permissions
+                             system -> system : vérification des permissions
+                             alt permissions insuffisantes
+                                     system --> interf: permission insuffisante
+                                     interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                             else permissions suffisantes
+                                     system --> interf: permission suffisante
+                                     interf --> user : renvoie formulaire  pour éditer mesurande
+                                     loop données non conformes ou mesurande n'existe pas dans la BD
+                                             user -> interf:  soumettre formulaire rempli
+                                             interf -> system:  validation des données
+                                             system -> system: validation du formulaire
+                                             alt données du formulaire conformes au modèle business mesurande
+                                                     system->db: vérification de l'existence préalable du  mesurande
+                                                     alt mesurande existe
+                                                             db-->system: mesurande existe
+                                                             system->db: débute la transaction
+                                                             system->db: exécute la modification
+                                                             system->db: commit la transaction
+                                                             alt transaction réussie
+                                                                     db-->system: transaction réussie
+                                                                     system-->interf: réussite: le mesurande a été sauvegardé
+                                                                     interf -> user: renvoie message "Le mesurande a été sauvegardé." + renvoie formulaire  pour éditer mesurande
+                                                             else transaction échouée
+                                                                     db-->system: transaction refusée
+                                                                     system->db: rollback la modification
+                                                                     system-->interf: édition du mesurande échouée
+                                                                     interf-->user: renvoie message d'erreur + formulaire rempli pour éditer un  mesurande
+                                                             end
+                                                     else mesurande n'existe pas
+                                                             db-->system: mesurande n'existe pas
+                                                     deactivate db
+                                                     destroy db
+                                                     system-->interf: erreur: mesurande n'existe pas
+                                                     interf -> user: renvoie message d'erreur "Ce mesurande n'existe pas." + formulaire rempli pour éditer un  mesurande
+                                             end
+                                     else données non conformes
+                                             system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                     deactivate system
+                                     destroy system
+                                     interf --> user:  renvoie formulaire rempli pour éditer un  mesurande + un message d'erreur par champ invalide
+                             deactivate user
+                             destroy user
+                     deactivate interf
+                     destroy interf
+             end
+     end
+end
+@enduml
+....
+.Supprimer un mesurande
+[plantuml,target=diagseq_admin_supprMesurande,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Mesurande" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: supprimer un  mesurande
+activate user
+     activate interf
+             activate system
+                     activate db
+                             user -> interf : demande la page de suppression d'un  mesurande
+                             interf -> system : Envoie de la requête utilisateur
+                             system -> db : obtention des permissions de l'utilisateur
+                             db --> system : renvoie des permissions
+                             system -> system : vérification des permissions
+                             alt permissions insuffisantes
+                                     system --> interf: permission insuffisante
+                                     interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                             else permissions suffisantes
+                                     system --> interf: permission suffisante
+                                     interf --> user : renvoie formulaire  pour supprimer mesurande
+                                     loop données non conformes ou mesurande n'existe pas dans la BD
+                                             user -> interf:  soumettre formulaire rempli
+                                             interf -> system:  validation des données
+                                             system -> system: validation du formulaire
+                                             alt données du formulaire conformes au modèle business mesurande
+                                                     system->db: vérification de l'existence préalable du  mesurande
+                                                     alt mesurande existe
+                                                             db-->system: mesurande existe
+                                                             system->db: débute la transaction
+                                                             system->db: exécute la modification
+                                                             system->db: commit la transaction
+                                                             alt transaction réussie
+                                                                     db-->system: transaction réussie
+                                                                     system-->interf: réussite: le mesurande a été supprimé
+                                                                     interf -> user: renvoie message "Le mesurande a été supprimé." + renvoie formulaire  pour supprimer mesurande
+                                                             else transaction échouée
+                                                                     db-->system: transaction refusée
+                                                                     system->db: rollback la modification
+                                                                     system-->interf: suppression du mesurande échouée
+                                                                     interf-->user: renvoie message d'erreur + formulaire rempli pour supprimer un  mesurande
+                                                             end
+                                                     else mesurande n'existe pas
+                                                             db-->system: mesurande n'existe pas
+                                                     deactivate db
+                                                     destroy db
+                                                     system-->interf: erreur: mesurande n'existe pas
+                                                     interf -> user: renvoie message d'erreur "Ce mesurande n'existe pas." + formulaire rempli pour supprimer un  mesurande
+                                             end
+                                     else données non conformes
+                                             system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                     deactivate system
+                                     destroy system
+                                     interf --> user:  renvoie formulaire rempli pour supprimer un  mesurande + un message d'erreur par champ invalide
+                             deactivate user
+                             destroy user
+                     deactivate interf
+                     destroy interf
+             end
+     end
+end
+@enduml
+....
+
+==== Gestion des relevés
+.Rechercher un relevé
+[plantuml,target=diagseq_user_rechercherReleve,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Utilisateur" as user
+participant ":Interface" as interf
+participant ":Relevés" as system
+participant ":DB" as db
+title __"Utilisateur"__: rechercher des relevés
+activate user
+        activate interf
+                activate system
+                        activate db
+                                user -> interf : demande le formulaire de recherche de relevés
+                                interf -> system : Envoie de la requête utilisateur
+                                system -> db : obtention des permissions de l'utilisateur
+                                db --> system : renvoie des permissions
+                                system -> system : vérification des permissions
+                                alt permissions insuffisantes
+                                        system --> interf: permission insuffisante
+                                        interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                                else permissions suffisantes
+                                        system --> interf: permission suffisante
+                                        interf --> user : renvoie formulaire vide pour rechercher un relevé
+                                        loop données non conformes
+                                                user -> interf:  soumettre formulaire rempli
+                                                interf -> system:  validation des données
+                                                system -> system: validation du formulaire
+                                                alt données du formulaire conformes au modèle business de recherche
+                                                        system->db: demande des relevés filtrés par critères
+                                                        db->system: renvoie la liste des relevés trouvés
+                                                        alt la liste contient au moins un résultat
+                                                            system --> interf: liste des résultats avec code HTTP 200 OK
+                                                            interf --> user: affichage des résultats en liste
+                                                        else la liste est vide
+                                                            system --> interf: pas de résultats avec un code HTTP 204: pas de contenu trouvé
+                                                            intef --> user: renvoie formulaire rempli + message "aucun résultat trouvé"
+                                                        end
+                                        else données non conformes
+                                                system-->interf: données du formulaire soumis sont invalides + détail des erreurs
+                                        deactivate system
+                                        destroy system
+                                        interf --> user:  renvoie formulaire rempli pour rechercher des relevés + un message d'erreur par filtre invalide
+                                deactivate user
+                                destroy user
+                        deactivate interf
+                        destroy interf
+                end
+        end
+end
+@enduml
+....
+.Créer relevé
+[plantuml,target=diagseq_user_creerReleve,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Utilisateur" as user
+participant ":Interface" as interf
+participant ":Relevés" as system
+participant ":DB" as db
+title __"Utilisateur"__: créer un nouveau relevé
+activate user
+        activate interf
+                activate system
+                        activate db
+                                user -> interf : demande la page de création d'un nouveau relevé
+                                interf -> system : Envoie de la requête utilisateur
+                                system -> db : obtention des permissions de l'utilisateur
+                                db --> system : renvoie des permissions
+                                system -> system : vérification des permissions
+                                alt permissions insuffisantes
+                                        system --> interf: permission insuffisante
+                                        interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                                else permissions suffisantes
+                                        system --> interf: permission suffisante
+                                        interf --> user : renvoie formulaire vide pour créer relevé
+                                        loop données non conformes ou relevé existe déjà dans la BD
+                                                user -> interf:  soumettre formulaire rempli
+                                                interf -> system:  validation des données
+                                                system -> system: validation du formulaire
+                                                alt données du formulaire conformes au modèle business relevé
+                                                        system->db: vérification de l'unicité du nouveau relevé
+                                                        alt relevé est unique
+                                                                db-->system: relevé est unique
+                                                                system->db: débute la transaction
+                                                                system->db: exécute la modification
+                                                                system->db: commit la transaction
+                                                                alt transaction réussie
+                                                                        db-->system: transaction réussie
+                                                                        system-->interf: réussite: le relevé a été sauvegardé
+                                                                        interf -> user: renvoie message "Le relevé a été sauvegardé." + renvoie formulaire vide pour créer relevé
+                                                                else transaction échouée
+                                                                        db-->system: transaction refusée
+                                                                        system->db: rollback la modification
+                                                                        system-->interf: création du relevé échouée
+                                                                        interf-->user: renvoie message d'erreur + formulaire rempli pour créer un nouveau relevé
+                                                                end
+                                                        else relevé existe déjà
+                                                                db-->system: relevé existe déjà
+                                                        deactivate db
+                                                        destroy db
+                                                        system-->interf: erreur: relevé existe déjà
+                                                        interf -> user: renvoie message d'erreur "Ce relevé existe déjà." + formulaire rempli pour créer un nouveau relevé
+                                                end
+                                        else données non conformes
+                                                system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                        deactivate system
+                                        destroy system
+                                        interf --> user:  renvoie formulaire rempli pour créer un nouveau relevé + un message d'erreur par champ invalide
+                                deactivate user
+                                destroy user
+                        deactivate interf
+                        destroy interf
+                end
+        end
+end
+@enduml
+....
+.Consulter un relevé
+[plantuml,target=diagseq_user_consulterReleve,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Utilisateur" as user
+participant ":Interface" as interf
+participant ":Relevés" as system
+participant ":DB" as db
+title __"Utilisateur"__: consulter un relevé
+activate user
+        activate interf
+                activate system
+                        activate db
+                                user -> interf : demande la page de consultation d'un relevé
+                                interf -> system : Envoie de la requête utilisateur
+                                system -> db : obtention des permissions de l'utilisateur
+                                db --> system : renvoie des permissions
+                                system -> system : vérification des permissions
+                                alt permissions insuffisantes
+                                        system --> interf: permission insuffisante
+                                        interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                                else permissions suffisantes
+                                        system --> interf: permission suffisante
+                                        interf --> user : renvoie formulaire  pour consulter relevé
+                                        loop données non conformes ou relevé n'existe pas dans la BD
+                                                user -> interf:  soumettre formulaire
+                                                interf -> system:  validation des données
+                                                system -> system: validation du formulaire
+                                                alt données du formulaire conformes au modèle business relevé
+                                                        system->db: vérification de l'existence préalable du  relevé
+                                                        alt relevé existe
+                                                                db-->system: relevé existe
+
+
+                                                                        system-->interf: réussite: le relevé a été trouvée
+                                                                        interf -> user: renvoie message "Le relevé a été trouvée." + renvoie les détails du relevé
+
+                                                        else relevé n'existe pas
+                                                                db-->system: relevé n'existe pas
+                                                        deactivate db
+                                                        destroy db
+                                                        system-->interf: erreur: relevé n'existe pas
+                                                        interf -> user: renvoie message d'erreur "Ce relevé n'existe pas." + formulaire pour consulter relevé
+                                                end
+                                        else données non conformes
+                                                system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                        deactivate system
+                                        destroy system
+                                        interf --> user:  renvoie formulaire rempli pour éditer un relevé + un message d'erreur par champ invalide
+                                deactivate user
+                                destroy user
+                        deactivate interf
+                        destroy interf
+                end
+        end
+end
+@enduml
+....
+.Éditer un relevé
+[plantuml,target=diagseq_user_editerReleve,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Utilisateur" as user
+participant ":Interface" as interf
+participant ":Relevés" as system
+participant ":DB" as db
+title __"Utilisateur"__: éditer un relevé
+activate user
+      activate interf
+              activate system
+                      activate db
+                              user -> interf : demande la page d'édition d'un relevé
+                              interf -> system : Envoie de la requête utilisateur
+                              system -> db : obtention des permissions de l'utilisateur
+                              db --> system : renvoie des permissions
+                              system -> system : vérification des permissions
+                              alt permissions insuffisantes
+                                      system --> interf: permission insuffisante
+                                      interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                              else permissions suffisantes
+                                      system --> interf: permission suffisante
+                                      interf --> user : renvoie formulaire  pour éditer relevé
+                                      loop données non conformes ou relevé n'existe pas dans la BD
+                                              user -> interf:  soumettre formulaire rempli
+                                              interf -> system:  validation des données
+                                              system -> system: validation du formulaire
+                                              alt données du formulaire conformes au modèle business relevé
+                                                      system->db: vérification de l'existence préalable du  relevé
+                                                      alt relevé existe
+                                                              db-->system: relevé existe
+                                                              system->db: débute la transaction
+                                                              system->db: exécute la modification
+                                                              system->db: commit la transaction
+                                                              alt transaction réussie
+                                                                      db-->system: transaction réussie
+                                                                      system-->interf: réussite: le relevé a été sauvegardé
+                                                                      interf -> user: renvoie message "Le relevé a été sauvegardé." + renvoie formulaire  pour éditer relevé
+                                                              else transaction échouée
+                                                                      db-->system: transaction refusée
+                                                                      system->db: rollback la modification
+                                                                      system-->interf: édition du relevé échouée
+                                                                      interf-->user: renvoie message d'erreur + formulaire rempli pour éditer un relevé
+                                                              end
+                                                      else relevé n'existe pas
+                                                              db-->system: relevé n'existe pas
+                                                      deactivate db
+                                                      destroy db
+                                                      system-->interf: erreur: relevé n'existe pas
+                                                      interf -> user: renvoie message d'erreur "Ce relevé n'existe pas." + formulaire rempli pour éditer un relevé
+                                              end
+                                      else données non conformes
+                                              system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                      deactivate system
+                                      destroy system
+                                      interf --> user:  renvoie formulaire rempli pour éditer un relevé + un message d'erreur par champ invalide
+                              deactivate user
+                              destroy user
+                      deactivate interf
+                      destroy interf
+              end
+      end
+end
+@enduml
+....
+.Supprimer un relevé
+[plantuml,target=diagseq_user_supprReleve,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Utilisateur" as user
+participant ":Interface" as interf
+participant ":Relevés" as system
+participant ":DB" as db
+title __"Utilisateur"__: supprimer un relevé
+activate user
+     activate interf
+             activate system
+                     activate db
+                             user -> interf : demande la page de suppression d'un relevé
+                             interf -> system : Envoie de la requête utilisateur
+                             system -> db : obtention des permissions de l'utilisateur
+                             db --> system : renvoie des permissions
+                             system -> system : vérification des permissions
+                             alt permissions insuffisantes
+                                     system --> interf: permission insuffisante
+                                     interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                             else permissions suffisantes
+                                     system --> interf: permission suffisante
+                                     interf --> user : renvoie formulaire  pour supprimer relevé
+                                     loop données non conformes ou relevé n'existe pas dans la BD
+                                             user -> interf:  soumettre formulaire rempli
+                                             interf -> system:  validation des données
+                                             system -> system: validation du formulaire
+                                             alt données du formulaire conformes au modèle business relevé
+                                                     system->db: vérification de l'existence préalable du  relevé
+                                                     alt relevé existe
+                                                             db-->system: relevé existe
+                                                             system->db: débute la transaction
+                                                             system->db: exécute la modification
+                                                             system->db: commit la transaction
+                                                             alt transaction réussie
+                                                                     db-->system: transaction réussie
+                                                                     system-->interf: réussite: le relevé a été supprimé
+                                                                     interf -> user: renvoie message "Le relevé a été supprimé." + renvoie formulaire  pour supprimer relevé
+                                                             else transaction échouée
+                                                                     db-->system: transaction refusée
+                                                                     system->db: rollback la modification
+                                                                     system-->interf: suppression du relevé échouée
+                                                                     interf-->user: renvoie message d'erreur + formulaire rempli pour supprimer un relevé
+                                                             end
+                                                     else relevé n'existe pas
+                                                             db-->system: relevé n'existe pas
+                                                     deactivate db
+                                                     destroy db
+                                                     system-->interf: erreur: relevé n'existe pas
+                                                     interf -> user: renvoie message d'erreur "Ce relevé n'existe pas." + formulaire rempli pour supprimer un relevé
+                                             end
+                                     else données non conformes
+                                             system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                     deactivate system
+                                     destroy system
+                                     interf --> user:  renvoie formulaire rempli pour supprimer un relevé + un message d'erreur par champ invalide
+                             deactivate user
+                             destroy user
+                     deactivate interf
+                     destroy interf
+             end
+     end
+end
+@enduml
+....
+
+==== Gestion des comptes utilisateur
+.Créer un compte utilisateur
+[plantuml,target=diagseq_admin_creerUtilisateur,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Users" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: créer un nouveau utilisateur
+activate user
+     activate interf
+             activate system
+                     activate db
+                             user -> interf : demande la page de création d'un nouveau utilisateur
+                             interf -> system : Envoie de la requête utilisateur
+                             system -> db : obtention des permissions de l'utilisateur
+                             db --> system : renvoie des permissions
+                             system -> system : vérification des permissions
+                             alt permissions insuffisantes
+                                     system --> interf: permission insuffisante
+                                     interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                             else permissions suffisantes
+                                     system --> interf: permission suffisante
+                                     interf --> user : renvoie formulaire vide pour créer utilisateur
+                                     loop données non conformes ou utilisateur existe déjà dans la BD
+                                             user -> interf:  soumettre formulaire rempli
+                                             interf -> system:  validation des données
+                                             system -> system: validation du formulaire
+                                             alt données du formulaire conformes au modèle business utilisateur
+                                                     system->db: vérification de l'unicité du nouveau utilisateur
+                                                     alt utilisateur est unique
+                                                             db-->system: utilisateur est unique
+                                                             system->db: débute la transaction
+                                                             system->db: exécute la modification
+                                                             system->db: commit la transaction
+                                                             alt transaction réussie
+                                                                     db-->system: transaction réussie
+                                                                     system-->interf: réussite: le utilisateur a été sauvegardé
+                                                                     interf -> user: renvoie message "Le utilisateur a été sauvegardé." + renvoie formulaire vide pour créer utilisateur
+                                                             else transaction échouée
+                                                                     db-->system: transaction refusée
+                                                                     system->db: rollback la modification
+                                                                     system-->interf: création du utilisateur échouée
+                                                                     interf-->user: renvoie message d'erreur + formulaire rempli pour créer un nouveau utilisateur
+                                                             end
+                                                     else utilisateur existe déjà
+                                                             db-->system: utilisateur existe déjà
+                                                     deactivate db
+                                                     destroy db
+                                                     system-->interf: erreur: utilisateur existe déjà
+                                                     interf -> user: renvoie message d'erreur "Ce utilisateur existe déjà." + formulaire rempli pour créer un nouveau utilisateur
+                                             end
+                                     else données non conformes
+                                             system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                     deactivate system
+                                     destroy system
+                                     interf --> user:  renvoie formulaire rempli pour créer un nouveau utilisateur + un message d'erreur par champ invalide
+                             deactivate user
+                             destroy user
+                     deactivate interf
+                     destroy interf
+             end
+     end
+end
+@enduml
+....
+.Consulter un compte utilisateur
+[plantuml,target=diagseq_admin_consulterUtilisateur,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Users" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: consulter un  utilisateur
+activate user
+      activate interf
+              activate system
+                      activate db
+                              user -> interf : demande la page de consultation d'un  utilisateur
+                              interf -> system : Envoie de la requête utilisateur
+                              system -> db : obtention des permissions de l'utilisateur
+                              db --> system : renvoie des permissions
+                              system -> system : vérification des permissions
+                              alt permissions insuffisantes
+                                      system --> interf: permission insuffisante
+                                      interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                              else permissions suffisantes
+                                      system --> interf: permission suffisante
+                                      interf --> user : renvoie formulaire  pour consulter utilisateur
+                                      loop données non conformes ou utilisateur n'existe pas dans la BD
+                                              user -> interf:  soumettre formulaire
+                                              interf -> system:  validation des données
+                                              system -> system: validation du formulaire
+                                              alt données du formulaire conformes au modèle business utilisateur
+                                                      system->db: vérification de l'existence préalable du  utilisateur
+                                                      alt utilisateur existe
+                                                              db-->system: utilisateur existe
+
+
+                                                                      system-->interf: réussite: le utilisateur a été trouvé
+                                                                      interf -> user: renvoie message "Le utilisateur a été trouvé." + renvoie les détails du utilisateur
+
+                                                      else utilisateur n'existe pas
+                                                              db-->system: utilisateur n'existe pas
+                                                      deactivate db
+                                                      destroy db
+                                                      system-->interf: erreur: utilisateur n'existe pas
+                                                      interf -> user: renvoie message d'erreur "Ce utilisateur n'existe pas." + formulaire pour consulter utilisateur
+                                              end
+                                      else données non conformes
+                                              system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                      deactivate system
+                                      destroy system
+                                      interf --> user:  renvoie formulaire rempli pour éditer un  utilisateur + un message d'erreur par champ invalide
+                              deactivate user
+                              destroy user
+                      deactivate interf
+                      destroy interf
+              end
+      end
+end
+@enduml
+....
+.Éditer un compte utilisateur
+[plantuml,target=diagseq_admin_editerUtilisateur,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Users" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: éditer un  utilisateur
+activate user
+      activate interf
+              activate system
+                      activate db
+                              user -> interf : demande la page d'édition d'un  utilisateur
+                              interf -> system : Envoie de la requête utilisateur
+                              system -> db : obtention des permissions de l'utilisateur
+                              db --> system : renvoie des permissions
+                              system -> system : vérification des permissions
+                              alt permissions insuffisantes
+                                      system --> interf: permission insuffisante
+                                      interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                              else permissions suffisantes
+                                      system --> interf: permission suffisante
+                                      interf --> user : renvoie formulaire  pour éditer utilisateur
+                                      loop données non conformes ou utilisateur n'existe pas dans la BD
+                                              user -> interf:  soumettre formulaire rempli
+                                              interf -> system:  validation des données
+                                              system -> system: validation du formulaire
+                                              alt données du formulaire conformes au modèle business utilisateur
+                                                      system->db: vérification de l'existence préalable du  utilisateur
+                                                      alt utilisateur existe
+                                                              db-->system: utilisateur existe
+                                                              system->db: débute la transaction
+                                                              system->db: exécute la modification
+                                                              system->db: commit la transaction
+                                                              alt transaction réussie
+                                                                      db-->system: transaction réussie
+                                                                      system-->interf: réussite: le utilisateur a été sauvegardé
+                                                                      interf -> user: renvoie message "Le utilisateur a été sauvegardé." + renvoie formulaire  pour éditer utilisateur
+                                                              else transaction échouée
+                                                                      db-->system: transaction refusée
+                                                                      system->db: rollback la modification
+                                                                      system-->interf: édition du utilisateur échouée
+                                                                      interf-->user: renvoie message d'erreur + formulaire rempli pour éditer un  utilisateur
+                                                              end
+                                                      else utilisateur n'existe pas
+                                                              db-->system: utilisateur n'existe pas
+                                                      deactivate db
+                                                      destroy db
+                                                      system-->interf: erreur: utilisateur n'existe pas
+                                                      interf -> user: renvoie message d'erreur "Ce utilisateur n'existe pas." + formulaire rempli pour éditer un  utilisateur
+                                              end
+                                      else données non conformes
+                                              system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                      deactivate system
+                                      destroy system
+                                      interf --> user:  renvoie formulaire rempli pour éditer un  utilisateur + un message d'erreur par champ invalide
+                              deactivate user
+                              destroy user
+                      deactivate interf
+                      destroy interf
+              end
+      end
+end
+@enduml
+....
+.Supprimer un compte utilisateur
+[plantuml,target=diagseq_admin_supprUtilisateur,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Users" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: supprimer un  utilisateur
+activate user
+        activate interf
+                activate system
+                        activate db
+                                user -> interf : demande la page de suppression d'un  utilisateur
+                                interf -> system : Envoie de la requête utilisateur
+                                system -> db : obtention des permissions de l'utilisateur
+                                db --> system : renvoie des permissions
+                                system -> system : vérification des permissions
+                                alt permissions insuffisantes
+                                        system --> interf: permission insuffisante
+                                        interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                                else permissions suffisantes
+                                        system --> interf: permission suffisante
+                                        interf --> user : renvoie formulaire  pour supprimer utilisateur
+                                        loop données non conformes ou utilisateur n'existe pas dans la BD
+                                                user -> interf:  soumettre formulaire rempli
+                                                interf -> system:  validation des données
+                                                system -> system: validation du formulaire
+                                                alt données du formulaire conformes au modèle business utilisateur
+                                                        system->db: vérification de l'existence préalable du  utilisateur
+                                                        alt utilisateur existe
+                                                                db-->system: utilisateur existe
+                                                                system->db: débute la transaction
+                                                                system->db: exécute la modification
+                                                                system->db: commit la transaction
+                                                                alt transaction réussie
+                                                                        db-->system: transaction réussie
+                                                                        system-->interf: réussite: le utilisateur a été supprimé
+                                                                        interf -> user: renvoie message "Le utilisateur a été supprimé." + renvoie formulaire  pour supprimer utilisateur
+                                                                else transaction échouée
+                                                                        db-->system: transaction refusée
+                                                                        system->db: rollback la modification
+                                                                        system-->interf: suppression du utilisateur échouée
+                                                                        interf-->user: renvoie message d'erreur + formulaire rempli pour supprimer un  utilisateur
+                                                                end
+                                                        else utilisateur n'existe pas
+                                                                db-->system: utilisateur n'existe pas
+                                                        deactivate db
+                                                        destroy db
+                                                        system-->interf: erreur: utilisateur n'existe pas
+                                                        interf -> user: renvoie message d'erreur "Ce utilisateur n'existe pas." + formulaire rempli pour supprimer un  utilisateur
+                                                end
+                                        else données non conformes
+                                                system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                        deactivate system
+                                        destroy system
+                                        interf --> user:  renvoie formulaire rempli pour supprimer un  utilisateur + un message d'erreur par champ invalide
+                                deactivate user
+                                destroy user
+                        deactivate interf
+                        destroy interf
+                end
+        end
+end
+@enduml
+....
+
+==== Gestion des rôles
+.Créer un rôle
+[plantuml,target=diagseq_admin_creerRole,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Rôle" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: créer un nouveau rôle
+activate user
+     activate interf
+             activate system
+                     activate db
+                             user -> interf : demande la page de création d'un nouveau rôle
+                             interf -> system : Envoie de la requête utilisateur
+                             system -> db : obtention des permissions de l'utilisateur
+                             db --> system : renvoie des permissions
+                             system -> system : vérification des permissions
+                             alt permissions insuffisantes
+                                     system --> interf: permission insuffisante
+                                     interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                             else permissions suffisantes
+                                     system --> interf: permission suffisante
+                                     interf --> user : renvoie formulaire vide pour créer rôle
+                                     loop données non conformes ou rôle existe déjà dans la BD
+                                             user -> interf:  soumettre formulaire rempli
+                                             interf -> system:  validation des données
+                                             system -> system: validation du formulaire
+                                             alt données du formulaire conformes au modèle business rôle
+                                                     system->db: vérification de l'unicité du nouveau rôle
+                                                     alt rôle est unique
+                                                             db-->system: rôle est unique
+                                                             system->db: débute la transaction
+                                                             system->db: exécute la modification
+                                                             system->db: commit la transaction
+                                                             alt transaction réussie
+                                                                     db-->system: transaction réussie
+                                                                     system-->interf: réussite: le rôle a été sauvegardé
+                                                                     interf -> user: renvoie message "Le rôle a été sauvegardé." + renvoie formulaire vide pour créer rôle
+                                                             else transaction échouée
+                                                                     db-->system: transaction refusée
+                                                                     system->db: rollback la modification
+                                                                     system-->interf: création du rôle échouée
+                                                                     interf-->user: renvoie message d'erreur + formulaire rempli pour créer un nouveau rôle
+                                                             end
+                                                     else rôle existe déjà
+                                                             db-->system: rôle existe déjà
+                                                     deactivate db
+                                                     destroy db
+                                                     system-->interf: erreur: rôle existe déjà
+                                                     interf -> user: renvoie message d'erreur "Ce rôle existe déjà." + formulaire rempli pour créer un nouveau rôle
+                                             end
+                                     else données non conformes
+                                             system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                     deactivate system
+                                     destroy system
+                                     interf --> user:  renvoie formulaire rempli pour créer un nouveau rôle + un message d'erreur par champ invalide
+                             deactivate user
+                             destroy user
+                     deactivate interf
+                     destroy interf
+             end
+     end
+end
+@enduml
+....
+.Consulter un rôle
+[plantuml,target=diagseq_admin_consulterRole,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Rôle" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: consulter un  rôle
+activate user
+     activate interf
+             activate system
+                     activate db
+                             user -> interf : demande la page de consultation d'un  rôle
+                             interf -> system : Envoie de la requête utilisateur
+                             system -> db : obtention des permissions de l'utilisateur
+                             db --> system : renvoie des permissions
+                             system -> system : vérification des permissions
+                             alt permissions insuffisantes
+                                     system --> interf: permission insuffisante
+                                     interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                             else permissions suffisantes
+                                     system --> interf: permission suffisante
+                                     interf --> user : renvoie formulaire  pour consulter rôle
+                                     loop données non conformes ou rôle n'existe pas dans la BD
+                                             user -> interf:  soumettre formulaire
+                                             interf -> system:  validation des données
+                                             system -> system: validation du formulaire
+                                             alt données du formulaire conformes au modèle business rôle
+                                                     system->db: vérification de l'existence préalable du  rôle + le rôle n'est assigné à aucun utilisateur
+                                                     alt rôle existe
+                                                             db-->system: rôle existe
+
+
+                                                                     system-->interf: réussite: le rôle a été trouvé
+                                                                     interf -> user: renvoie message "Le rôle a été trouvé." + renvoie les détails du rôle
+
+                                                     else rôle n'existe pas
+                                                             db-->system: rôle n'existe pas
+                                                     deactivate db
+                                                     destroy db
+                                                     system-->interf: erreur: rôle n'existe pas
+                                                     interf -> user: renvoie message d'erreur "Ce rôle n'existe pas." + formulaire pour consulter rôle
+                                             end
+                                     else données non conformes
+                                             system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                     deactivate system
+                                     destroy system
+                                     interf --> user:  renvoie formulaire rempli pour éditer un  rôle + un message d'erreur par champ invalide
+                             deactivate user
+                             destroy user
+                     deactivate interf
+                     destroy interf
+             end
+     end
+end
+@enduml
+....
+.Éditer un rôle
+[plantuml,target=diagseq_admin_editerRole,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Rôle" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: éditer un  rôle
+activate user
+     activate interf
+             activate system
+                     activate db
+                             user -> interf : demande la page d'édition d'un  rôle
+                             interf -> system : Envoie de la requête utilisateur
+                             system -> db : obtention des permissions de l'utilisateur
+                             db --> system : renvoie des permissions
+                             system -> system : vérification des permissions
+                             alt permissions insuffisantes
+                                     system --> interf: permission insuffisante
+                                     interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                             else permissions suffisantes
+                                     system --> interf: permission suffisante
+                                     interf --> user : renvoie formulaire  pour éditer rôle
+                                     loop données non conformes ou rôle n'existe pas dans la BD
+                                             user -> interf:  soumettre formulaire rempli
+                                             interf -> system:  validation des données
+                                             system -> system: validation du formulaire
+                                             alt données du formulaire conformes au modèle business rôle
+                                                     system->db: vérification de l'existence préalable du  rôle + le rôle n'est assigné à aucun utilisateur
+                                                     alt rôle existe
+                                                             db-->system: rôle existe
+                                                             system->db: débute la transaction
+                                                             system->db: exécute la modification
+                                                             system->db: commit la transaction
+                                                             alt transaction réussie
+                                                                     db-->system: transaction réussie
+                                                                     system-->interf: réussite: le rôle a été sauvegardé
+                                                                     interf -> user: renvoie message "Le rôle a été sauvegardé." + renvoie formulaire  pour éditer rôle
+                                                             else transaction échouée
+                                                                     db-->system: transaction refusée
+                                                                     system->db: rollback la modification
+                                                                     system-->interf: édition du rôle échouée
+                                                                     interf-->user: renvoie message d'erreur + formulaire rempli pour éditer un  rôle
+                                                             end
+                                                     else rôle n'existe pas
+                                                             db-->system: rôle n'existe pas
+                                                     deactivate db
+                                                     destroy db
+                                                     system-->interf: erreur: rôle n'existe pas
+                                                     interf -> user: renvoie message d'erreur "Ce rôle n'existe pas." + formulaire rempli pour éditer un  rôle
+                                             end
+                                     else données non conformes
+                                             system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                     deactivate system
+                                     destroy system
+                                     interf --> user:  renvoie formulaire rempli pour éditer un  rôle + un message d'erreur par champ invalide
+                             deactivate user
+                             destroy user
+                     deactivate interf
+                     destroy interf
+             end
+     end
+end
+@enduml
+....
+.Supprimer un rôle
+[plantuml,target=diagseq_admin_supprRole,format=svg]
+....
+@startuml
+skinparam ParticipantPadding 20
+skinparam responseMessageBelowArrow true
+skinparam maxMessageSize 300
+'!theme spacelab
+hide footbox
+autonumber
+actor "Utilisateur:Administrateur" as user
+participant ":Interface" as interf
+participant ":Rôle" as system
+participant ":DB" as db
+title __"Utilisateur Administrateur"__: supprimer un  rôle
+activate user
+     activate interf
+             activate system
+                     activate db
+                             user -> interf : demande la page de suppression d'un  rôle
+                             interf -> system : Envoie de la requête utilisateur
+                             system -> db : obtention des permissions de l'utilisateur
+                             db --> system : renvoie des permissions
+                             system -> system : vérification des permissions
+                             alt permissions insuffisantes
+                                     system --> interf: permission insuffisante
+                                     interf --> user: renvoie message "Vous ne disposez pas des permissions nécessaires pour effectuer cette action"
+                             else permissions suffisantes
+                                     system --> interf: permission suffisante
+                                     interf --> user : renvoie formulaire  pour supprimer rôle
+                                     loop données non conformes ou rôle n'existe pas dans la BD
+                                             user -> interf:  soumettre formulaire rempli
+                                             interf -> system:  validation des données
+                                             system -> system: validation du formulaire
+                                             alt données du formulaire conformes au modèle business rôle
+                                                     system->db: vérification de l'existence préalable du  rôle + le rôle n'est assigné à aucun utilisateur
+                                                     alt rôle existe
+                                                             db-->system: rôle existe
+                                                             system->db: débute la transaction
+                                                             system->db: exécute la modification
+                                                             system->db: commit la transaction
+                                                             alt transaction réussie
+                                                                     db-->system: transaction réussie
+                                                                     system-->interf: réussite: le rôle a été supprimé
+                                                                     interf -> user: renvoie message "Le rôle a été supprimé." + renvoie formulaire  pour supprimer rôle
+                                                             else transaction échouée
+                                                                     db-->system: transaction refusée
+                                                                     system->db: rollback la modification
+                                                                     system-->interf: suppression du rôle échouée
+                                                                     interf-->user: renvoie message d'erreur + formulaire rempli pour supprimer un  rôle
+                                                             end
+                                                     else rôle n'existe pas
+                                                             db-->system: rôle n'existe pas
+                                                     deactivate db
+                                                     destroy db
+                                                     system-->interf: erreur: rôle n'existe pas
+                                                     interf -> user: renvoie message d'erreur "Ce rôle n'existe pas." + formulaire rempli pour supprimer un  rôle
+                                             end
+                                     else données non conformes
+                                             system-->interf: données du formulaire soumis sont invalides + détail des erreurs par champ
+                                     deactivate system
+                                     destroy system
+                                     interf --> user:  renvoie formulaire rempli pour supprimer un  rôle + un message d'erreur par champ invalide
+                             deactivate user
+                             destroy user
+                     deactivate interf
+                     destroy interf
+             end
+     end
+end
+@enduml
+....
+
+=== Diagrammes d'état-transition
+.L'utilisateur assigne ou retire une permission d'un rôle
+[plantuml,target=diagetats_permission_etats,format=svg]
+....
+@startuml
+title L'utilisateur assigne ou retire une permission d'un rôle
+
+start
+:Demande la page de gestion des rôles;
+:Créé ou édite un rôle;
+
+if (Souhaite assigner ou retirer une permission d'un rôle?) then (assigner)
+    :Assigne la permission au rôle;
+else (retirer)
+    :Retire la permission du rôle;
+    :Sauvegarde le rôle;
+endif
+stop
+@enduml
+....
+
+.Authentification : Les états de l'utilisateur
+[plantuml,target=diagetats_utilisateur_etats,format=svg]
+....
+@startuml
+scale 700 width
+title Authentification : Les états de l'utilisateur
+
+[*] --> Visiteur: Se rend sur la page pour s'enregistrer
+Visiteur --> CompteActivé: Enregistrement de son compte validé
+CompteActivé --> NonAuthentifié: Se rend sur la page de connexion
+NonAuthentifié --> EnAttenteDeValidation: Login et mot de passe rentrés et soumis
+EnAttenteDeValidation --> Authentifié: Accès validé par le système
+Authentifié --> CompteDésactivéEtNonAuthentifié: Option "désactiver le compte" utilisée
+CompteDésactivéEtNonAuthentifié --> CompteActivéEtAuthentifié: Formulaire de login soumis et validé
+Authentifié --> NonAuthentifié: Option "se déconnecter" utilisée
+NonAuthentifié --> [*]: Ferme le navigateur
+@enduml
+....
+=== Diagrammes d'activité
+
+.Le visiteur souhaite se créer un compte
+[plantuml,target=diagactiv_visiteur_seCreerUnCompte,format=svg]
+....
+@startuml
+title Le visiteur souhaite se créer un compte
+
+|Visiteur|
+start
+:Visiteur demande la page d'inscription;
+:Le formulaire d'inscription s'affiche;
+:Entre son adresse e-mail, sa date de naissance, son nom de visiteur unique, son mot de passe et autres informations;
+while(Soumets le formulaire) is (formulaire invalide)
+:Redirigé vers la même page avec des messages d'erreurs;
+:Visiteur corrige les champs erronés;
+endwhile (formulaire valide)
+:Connecté à l'application;
+:Redirigé vers le dashboard avec un message de confirmation;
+:Le bouton de déconnexion est visible;
+stop
+@enduml
+....
+
+.Le visiteur souhaite se connecter
+[plantuml,target=diagactiv_visiteur_connexion,format=svg]
+....
+@startuml
+title Le visiteur souhaite se connecter
+
+|Visiteur|
+start
+:Visiteur demande la page de connexion;
+:Le formulaire de connexion s'affiche;
+:Entre son nom de visiteur et son mot de passe;
+while(Soumets le formulaire) is (formulaire invalide)
+:Redirigé vers la même page avec des messages d'erreurs;
+:Visiteur corrige les champs erronés;
+endwhile (formulaire valide)
+:Connecté à l'application;
+:Redirigé vers le dashboard avec un message de confirmation;
+:Le bouton de déconnexion est visible;
+stop
+@enduml
+....
+
+.L'utilisateur souhaite consulter une page : vérification des permissions
+[plantuml,target=diagactiv_user_checkPerms,format=svg]
+....
+@startuml
+title L'utilisateur souhaite consulter une page : vérification des permissions
+
+|#AntiqueWhite|user|Utilisateur
+start
+|system|Système
+
+|user|
+:Demande la page;
+|system|
+:Permission requise;
+:Obtention du rôle;
+:Vérification de la permission assigné au rôle;
+if (Permission) then (invalide)
+    |user|
+    :Redirigé vers la page précédente avec un message d'erreur;
+else (valide)
+    |user|
+    :Consulte la page;
+endif
+stop
+@enduml
+....
+
+=== Les tests case
+//TODO: faire au moins 2-3 tests cases rapidement?
+Aucun analyste dédié n'a été assigné au projet.
+Par manque de ressource humaine aucun test case n'a été analysé.
+
+=== Les standards applicatif
+==== Charte graphique
+===== Palette
+// The Material color picker I used to obtain this palette: https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=6200EE&secondary.color=FFD740
+// I picked the primary and secondary colors based on the Angular Material default "deeppurple-amber" theme: https://github.com/angular/components/blob/main/src/material/core/theming/prebuilt/deeppurple-amber.scss
+.Palette
+image::charte-palette.png[Palette, 400, 400]
+
+===== Composants
+// These are screen captures obtained from the previously generated Material color picker, then on it do Export > Codepen > Capture manually the elements
+// Also, a complete catalogue is available here: https://material-components.github.io/material-components-web-catalog/#/
+.Boutons
+image::charte-boutons.PNG[Boutons, 400, 400]
+.Menu
+image::charte-menu.PNG[Menu, 400, 400]
+.Selection
+image::charte-selection.png[Selection, 400, 400]
+.Champs textuels
+image::charte-champstextuels.PNG[Champs textuels, 400, 400]
+.Switchs et sliders
+image::charte-sliders.PNG[Switchs et sliders, 400, 400]
+.Barre d'outils
+image::charte-barreoutils.PNG[Barre d'outils, 400, 400]
+.Cartes
+image::charte-cartes.PNG[Cartes, 400, 400]
+
+==== Maquette écran d'accueil
+
+.Tableau de bord de l'administrateur
+[plantuml,target=maquette-accueil,format=svg]
+....
+@startsalt
+scale 2.5
+{+
+{* <&home>SHAPP | Utilisateurs | <&graph> Journal de relevés | <&person> Mon compte | <&account-logout> Déconnexion }
+
+{
+=== Tableau de bord
+.
+.
+.
+.
+}
+
+}
+@endsalt
+....
+==== TODO Les écrans
+IMPORTANT: à compléter une fois que l'application est dévelopée
+
+===== TODO Le standard des pages
+IMPORTANT: à compléter une fois que l'application est dévelopée
+
+===== TODO Capture de chaque écran
+IMPORTANT: à compléter une fois que l'application est dévelopée
+
+== Le projet
+=== Budget prévisionnel
+////
+The tables in this section were made in Excel then simply copy-pasted to this file, no export from the excel file.
+The `format=tsv` attribute on the tables ensures the splitting of datas.
+////
+==== Descriptif
+Un unique développeur Junior est prévu pour le projet.
+Le projet doit démarrer le 01/01/2022.
+
+.Tâches de développement
+[options="header,autowidth", format=tsv]
+|===
+Tâche	Durée jour/homme
+Visiter la page promotionelle	2
+S'inscire	5
+Se connecter	5
+Se déconnecter	1
+Consulter tableau de bord	1
+Consulter compte personnel	2
+Éditer compte personnel	2
+Supprimer compte personnel	2
+Rechercher	1
+Créer relevé	1
+Consulter relevé	1
+Éditer relevé	1
+Supprimer relevé	1
+Créer rôle	2
+Consulter rôle	2
+Éditer rôle	2
+Supprimer rôle	2
+Assigner/retirer permission	2
+Créer mesurande	1
+Consulter mesurande	1
+Éditer mesurande	1
+Supprimer mesurande	1
+Créer utilisateur	1
+Consulter utilisateur	1
+Éditer utilisateur	1
+Supprimer utilisateur	1
+Total	43
+|===
+
+
+==== Coût jour/homme par métier
+
+Coût brut par jour/homme du développeur junior: 200,00 EUR
+
+.Coût du développeur junior sur la durée de développement
+[options="header,autowidth", format=tsv]
+|===
+Tâche	 Durée (jour/homme) 	 Coût (EUR)
+Analyse	15.00	 € 3,000.00
+Développement	43.00	 € 8,600.00
+Total		 € 11,600.00
+|===
+
+==== Besoin Infrastructure/hardware
+Consulter <<infrastructure-pour-lapplication-et-la-base-de-données>> pour une description des besoins en infrastructure et hardware.
+
+.Coût de l'infrastructure sur la vie du projet
+[options="header,autowidth", format=tsv]
+|===
+Besoin Infra/Hardware	Coût par an (EUR)
+Serveur applicatif	 € 907.08
+Serveur base de données	 € 575.88
+Location nom de domaine	 € 120.00
+Total	 € 1,602.96
+|===
+
+==== Diagramme de GANTT
+
+Date de fin estimée du projet: 23/03/2022
+
+.Diagramme de GANTT
+[plantuml,target=gantt,format=png]
+....
+@startgantt
+
+legend top
+  {AK} est le développeur junior assigné au projet
+endlegend
+
+saturday are closed
+sunday are closed
+
+printscale daily
+Project starts 2022-01-01
+then [Analyse] on {AK} lasts 15 days
+then [Visiter la page promotionelle] on {AK} lasts 2 days
+then [S'inscire] on {AK} lasts 5 days
+then [Se connecter] on {AK} lasts 5 days
+then [Se déconnecter] on {AK} lasts 1 days
+then [Consulter tableau de bord] on {AK} lasts 1 days
+then [Consulter compte personnel] on {AK} lasts 2 days
+then [Éditer compte personnel] on {AK} lasts 2 days
+then [Supprimer compte personnel] on {AK} lasts 2 days
+then [Rechercher] on {AK} lasts 1 days
+then [Créer relevé] on {AK} lasts 1 days
+then [Consulter relevé] on {AK} lasts 1 days
+then [Éditer relevé] on {AK} lasts 1 days
+then [Supprimer relevé] on {AK} lasts 1 days
+then [Créer rôle] on {AK} lasts 2 days
+then [Consulter rôle] on {AK} lasts 2 days
+then [Éditer rôle] on {AK} lasts 2 days
+then [Supprimer rôle] on {AK} lasts 2 days
+then [Assigner/retirer permission] on {AK} lasts 2 days
+then [Créer mesurande] on {AK} lasts 1 days
+then [Consulter mesurande] on {AK} lasts 1 days
+then [Éditer mesurande] on {AK} lasts 1 days
+then [Supprimer mesurande] on {AK} lasts 1 days
+then [Créer utilisateur] on {AK} lasts 1 days
+then [Consulter utilisateur] on {AK} lasts 1 days
+then [Éditer utilisateur] on {AK} lasts 1 days
+then [Supprimer utilisateur] on {AK} lasts 1 days
+@endgantt
+....
+
+=== TODO Budget réel
+IMPORTANT: à compléter une fois que l'application est dévelopée
+
+==== TODO Coût réel
+
+
+== TODO Conclusion
+Ce projet nous a permis de collaborer en équipe afin de le mener à bien tout en nous rendant autonome.
+Nous avons grâce à celui-ci pu comprendre l'intérêt de chaque outil aux différentes étapes de l’analyse.
+Depuis le début de celui-ci, nous avons acquis de l'expérience dans l’analyse et nous avons maintenant
+conscience du travail que cela implique.
+
+== Remerciement
+La réalisation de ce travail de n’aurait pas été possible sans certaines personnes que je tiens à remercier.
+Tout d’abord, je remercie le chargé de cours, Monsieur Mathieu.
+J’adresse également mes remerciements à Monsieur Lawarée, Monsieur De Guglielmo, Monsieur
+Boulafentis et Monsieur Diana, pour leur expertise, leur disponibilité et pour les connaissances qu’ils nous ont apportées tout au
+long de notre cursus.
+
+Enfin, je tiens à remercier mon camarade William Quairia, ma famille et mes proches pour leur aide et leur soutien.
+
+== Les annexes
+IMPORTANT: section vide
+
+== Bibliographie et webographie
+Boulafentis, Antonis. Principes d'Analyse Informatique. 2018-2019.
+Boulafentis, Antonis. Techniques de Gestion de Projet. 2018-2019.
+De Guglielmo, Roberto. Gestion de base de données. 2018-2019.
+Lawarée Xavier. Projet d’Analyse et conception. 2019-2020.

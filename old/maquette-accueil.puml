@@ -1,0 +1,15 @@
+@startsalt
+scale 2.5
+{+
+{* <&home>SHAPP | Utilisateurs | <&graph> Journal de relevés | <&person> Mon compte | <&account-logout> Déconnexion }
+
+{
+=== Tableau de bord
+.
+.
+.
+.
+}
+
+}
+@endsalt
