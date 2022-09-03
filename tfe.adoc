@@ -30,6 +30,7 @@ the maven build should display "BUILD SUCCESS" and the pdf is available at `targ
 :table-caption: Table
 :table-stripes: even
 :imagesdir: ./images
+:outdir: ./out
 //:!chapter-signifier:
 :chapter-refsig: Chapitre
 :section-refsig: Section

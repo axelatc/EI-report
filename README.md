@@ -2,7 +2,8 @@
 - Run `Bundle` at the roof this directory
 
 # Convert to PDF
-- Run `asciidoctor-pdf -v -r asciidoctor-diagram tfe.adoc` to convert the Asciidoctor file to a pdf file
+- Run `asciidoctor-pdf -v -r asciidoctor-diagram -o ./out/tfe.pdf tfe.adoc` to convert the Asciidoctor file to a pdf
+  file
 
 # Errors
 - If you get the error `asciidoctor: DEBUG: tfe.adoc: line 2405: unknown style for literal block: plantuml`:
