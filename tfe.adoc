@@ -179,8 +179,7 @@ Le datacenter doit se situer en Europe pour respecter le RGPD (Règlement Géné
 OVH nous permettant de choisir la France, nous nous tournerons vers lui.
 Notre client devra souscrire la location de 2 serveurs dédiés sous Linux ainsi qu’une base de données privative auprès de l’hébergeur OVH:
 
-Serveur applicatif{empty}footnote:[Tous nos serveurs dédiés. (01/06/2022). OVH. https://www.ovh.com/fr/serveurs_dedies/advance/tarifs/.]:
-
+.Serveur applicatif{empty}footnote:[Tous nos serveurs dédiés. (01/06/2022). OVH. https://www.ovh.com/fr/serveurs_dedies/advance/tarifs/.]
 * Processeur : Intel Xeon-D 2123IT - 4 c / 8 t - 2.2 GHz / 3 GHz
 * Mémoire : 32Go DDR4 ECC 2400MHz
 * Disque : 2x500Go SSD NVMe Soft RAID
@@ -188,8 +187,7 @@ Serveur applicatif{empty}footnote:[Tous nos serveurs dédiés. (01/06/2022). OVH
 * France
 * 75,59 EUR/mois TTC
 
-Serveur base de données{empty}footnote:[Cloud Databases. (01/06/2021). OVH. https://www.ovh.com/fr/cloud-databases/.]:
-
+.Serveur base de données{empty}footnote:[Cloud Databases. (01/06/2021). OVH. https://www.ovh.com/fr/cloud-databases/.]:
 * 4GO ram 64 GO Stockage
 * 47,99EUR/mois TTC
 
@@ -214,14 +212,12 @@ Des sauvegardes de la base de donnée sont aussi effectuées toutes les 24 heure
 <<<
 == Analyse
 === Cahier des charges fonctionnel
-
 ////
 ==== Les outils de développement
 Section en doublon dans canevas "Pour tous les projets.pdf" de Lawarée
 ////
 
 ==== Déterminer un contexte et rechercher le problème des utilisateurs
-
 Le projet est de créer un logiciel de type "hub" sportif dont la fonctionnalité phare est la gestion de ses relevés physiques et de performance par l'utilisateur.
 Le développement débutera en février et se terminera en octobre 2022.
 Un unique développeur est affecté à cette tâche: Axel Krebs.
@@ -361,6 +357,7 @@ Cf. <<définir-les-limites-et-les-rôles-du-projet>>
 
 <<<
 === Les cas d'utilisation
+
 .Les cas d'utilisation
 [plantuml,target=usecase-global,format=svg]
 ....
@@ -751,6 +748,7 @@ omegalul test
 [.portrait]
 <<<
 === Diagrammes de séquence
+//TODO: augmenter la taille de police des diagrammes
 ==== Gestion du compte personnel
 
 .Consulter son compte personnel
@@ -2329,29 +2327,29 @@ stop
 // The Material color picker I used to obtain this palette: https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=6200EE&secondary.color=FFD740
 // I picked the primary and secondary colors based on the Angular Material default "deeppurple-amber" theme: https://github.com/angular/components/blob/main/src/material/core/theming/prebuilt/deeppurple-amber.scss
 .Palette
-image::charte-palette.png[Palette, 400, 400]
+image::charte-palette.png[Palette,400,400]
 
 ===== Composants
 // These are screen captures obtained from the previously generated Material color picker, then on it do Export > Codepen > Capture manually the elements
 // Also, a complete catalogue is available here: https://material-components.github.io/material-components-web-catalog/#/
 .Boutons
-image::charte-boutons.PNG[Boutons, 400, 400]
+image::charte-boutons.PNG[Boutons,400,400]
 .Menu
-image::charte-menu.PNG[Menu, 400, 400]
+image::charte-menu.PNG[Menu,400,400]
 .Selection
-image::charte-selection.png[Selection, 400, 400]
+image::charte-selection.png[Selection,400,400]
 .Champs textuels
-image::charte-champstextuels.PNG[Champs textuels, 400, 400]
+image::charte-champstextuels.PNG[Champs textuels,400,400]
 .Switchs et sliders
-image::charte-sliders.PNG[Switchs et sliders, 400, 400]
+image::charte-sliders.PNG[Switchs et sliders,400,400]
 .Barre d'outils
-image::charte-barreoutils.PNG[Barre d'outils, 400, 400]
+image::charte-barreoutils.PNG[Barre d'outils,400,400]
 .Cartes
-image::charte-cartes.PNG[Cartes, 400, 400]
+image::charte-cartes.PNG[Cartes,400,400]
 
 <<<
 ==== Maquette écran d'accueil
-
+//TODO: faire des maquettes en plus si Mathieu le demande dans son feedback
 .Tableau de bord de l'administrateur
 [plantuml,target=maquette-accueil,format=svg]
 ....
@@ -2397,9 +2395,10 @@ The `format=tsv` attribute on the tables ensures the splitting of datas.
 
 Un unique développeur Junior est prévu pour le projet.
 Le projet doit démarrer le 01/01/2022.
+Date de fin estimée du projet: 23/03/2022
 
 .Tâches de développement
-[options="header,autowidth", format=tsv]
+[options="header,autowidth",format=tsv]
 |===
 Tâche	Durée jour/homme
 Visiter la page promotionelle	2
@@ -2437,7 +2436,7 @@ Total	43
 Coût brut par jour/homme du développeur junior: 200,00 EUR
 
 .Coût du développeur junior sur la durée de développement
-[options="header,autowidth", format=tsv]
+[options="header,autowidth",format=tsv]
 |===
 Tâche	 Durée (jour/homme) 	 Coût (EUR)
 Analyse	15.00	 € 3,000.00
@@ -2446,6 +2445,7 @@ Total		 € 11,600.00
 |===
 
 ==== Besoin Infrastructure/hardware
+
 Consulter <<infrastructure-pour-lapplication-et-la-base-de-données>> pour une description des besoins en infrastructure et hardware.
 
 .Coût de l'infrastructure sur la vie du projet
@@ -2511,20 +2511,21 @@ then [Supprimer utilisateur] on {AK} lasts 1 days
 [.portrait]
 <<<
 === TODO Budget réel
+
 IMPORTANT: à compléter une fois que l'application est dévelopée
 
 ==== TODO Coût réel
 
+IMPORTANT: à compléter une fois que l'application est dévelopée
 
 <<<
-
 == Conclusion
 
 Ce projet nous a permis de collaborer en équipe afin de le mener à bien tout en nous rendant autonome.
 Nous avons grâce à celui-ci pu comprendre l'intérêt de chaque outil aux différentes étapes de l’analyse.
-Depuis le début de celui-ci, nous avons acquis de l'expérience dans l’analyse et nous avons maintenant
-conscience du travail que cela implique.
+Depuis le début de celui-ci, nous avons acquis de l'expérience dans l’analyse et nous avons maintenant conscience du travail que cela implique.
 
+<<<
 == Remerciement
 
 La réalisation de ce travail de n’aurait pas été possible sans certaines personnes que je tiens à remercier.
@@ -2538,6 +2539,16 @@ Enfin, je tiens à remercier mon camarade William Quairia, ma famille et mes pro
 == Les annexes
 
 IMPORTANT: section vide
+
+////
+TODO: faire un glossaire si Mathieu le demande dans son feedback
+<<<
+[glossary]
+= Glossaire
+////
+
+
+<<<
 
 == Bibliographie et webographie
 Boulafentis, Antonis. Principes d'Analyse Informatique. 2018-2019.
