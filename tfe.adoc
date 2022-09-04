@@ -2469,21 +2469,28 @@ Total	 € 1,602.96
 <<<
 ==== Diagramme de GANTT
 
-Date de fin estimée du projet: 23/03/2022
+_Légende: {AK} est le développeur junior assigné au projet_
 
+//TODO: increase font size of months and days
 .Diagramme de GANTT
 [plantuml,target=gantt,format=png]
 ....
 @startgantt
 
-legend top
-  {AK} est le développeur junior assigné au projet
-endlegend
+<style>
+ganttDiagram {
+	task {
+		FontName Helvetica
+		FontSize 18
+	}
+}
+</style>
 
+language fr
 saturday are closed
 sunday are closed
+projectscale daily
 
-printscale daily
 Project starts 2022-01-01
 then [Analyse] on {AK} lasts 15 days
 then [Visiter la page promotionelle] on {AK} lasts 2 days
@@ -2494,7 +2501,7 @@ then [Consulter tableau de bord] on {AK} lasts 1 days
 then [Consulter compte personnel] on {AK} lasts 2 days
 then [Éditer compte personnel] on {AK} lasts 2 days
 then [Supprimer compte personnel] on {AK} lasts 2 days
-then [Rechercher] on {AK} lasts 1 days
+then [Rechercher relevé] on {AK} lasts 1 days
 then [Créer relevé] on {AK} lasts 1 days
 then [Consulter relevé] on {AK} lasts 1 days
 then [Éditer relevé] on {AK} lasts 1 days
