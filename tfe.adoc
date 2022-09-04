@@ -117,7 +117,7 @@ Le travail en équipe permet d’exploiter les compétences de chacun au service
 
 Cela nous permet d’être mis en situation professionnelle, de répondre aux exigences demandées dans un temps imparti dans l’optique de créer un projet viable fonctionnel et qui reflète notre expertise.
 
-Ce document a donc pour finalité d’être le support retranscrivant l’entièreté de l’analyse et de l’implémentation du projet d’application sportive nommée “Shapp”.
+Ce document a donc pour finalité d’être le support retranscrivant l’entièreté de l’analyse et de l’implémentation du projet d’application sportive nommée "Shapp".
 Il contiendra les besoins formulés par la société cliente, la traduction de ces derniers en vue d’y répondre via les techniques choisies, ainsi que l’ensemble des schémas d’analyse et des écrans de l’implémentation.
 
 Ce document est destiné :
@@ -132,7 +132,7 @@ La réalisation de ce projet s’inscrit dans le cadre d’un travail de fin d�
 S’agissant d’un nouveau développement applicatif, ce projet nous donne l’opportunité de mettre en pratique nos connaissances et compétences acquises lors de nos différents cours et stages, en vue de réaliser une application dont le thème principal est le secteur sportif.
 
 === Client
-Pour des raisons évidentes de confidentialité, nous utiliserons la dénomination fictive de “FitCorp” en référence à notre société cliente.
+Pour des raisons évidentes de confidentialité, nous utiliserons la dénomination fictive de "FitCorp" en référence à notre société cliente.
 
 <<<
 === Choix du projet
@@ -147,7 +147,7 @@ La société cliente s’occupera de la mise sur le marché et de la commerciali
 == Les techniques
 === Les outils de développement
 //TODO: Ajouter les versions exactes aux librairies
-Nous allons réaliser une application “hub” sportif faite à l’aide des technologies suivantes.
+Nous allons réaliser une application "hub" sportif faite à l’aide des technologies suivantes.
 
 .Back-end
 - Java 8+
@@ -191,11 +191,9 @@ Notre client devra souscrire la location de 2 serveurs dédiés sous Linux ainsi
 * 4GO ram 64 GO Stockage
 * 47,99EUR/mois TTC
 
-Le serveur applicatif hébergeant l’application sera accessible par Internet afin que les utilisateurs puissent
-utiliser l’application depuis n’importe quel appareil connecté au réseau public.
+Le serveur applicatif hébergeant l’application sera accessible par Internet afin que les utilisateurs puissent utiliser l’application depuis n’importe quel appareil connecté au réseau public.
 
-Nous utiliserons des serveurs privatifs et non virtualisés afin d’avoir un contrôle total des ressources des
-serveurs.
+Nous utiliserons des serveurs privatifs et non virtualisés afin d’avoir un contrôle total des ressources des serveurs.
 
 Nous devons réserver un nom de domaine belge (.be) pour notre application.
 
@@ -219,7 +217,7 @@ Section en doublon dans canevas "Pour tous les projets.pdf" de Lawarée
 
 ==== Déterminer un contexte et rechercher le problème des utilisateurs
 Le projet est de créer un logiciel de type "hub" sportif dont la fonctionnalité phare est la gestion de ses relevés physiques et de performance par l'utilisateur.
-Le développement débutera en février et se terminera en octobre 2022.
+Le développement débutera le 01/01/2022.
 Un unique développeur est affecté à cette tâche: Axel Krebs.
 
 ===== Les contraintes techniques
@@ -270,7 +268,7 @@ Les permissions sont héritées du haut vers le bas.
 * Supprimer un rôle uniquement si celui-ci n'est associé à aucun utilisateur
 * Créer, consulter, éditer et supprimer un mesurande
 
-===== Nombre d'utilisateur
+===== Nombre d'utilisateurs
 Nous ne dépasserons pas le nombre de mille utilisateurs dans la première année consécutive au lancement de l'application.
 
 ===== Pays
@@ -287,7 +285,8 @@ Sur celle-ci, il peut consulter les fonctionnalités de l'application. Elle cont
 ===== Page d'enregistrement
 Le bouton "Se créer un compte" redirige le visiteur vers un formulaire où il doit encoder son e-mail, mot de passe, nom d’utilisateur unique, prénom, nom, date de naissance, genre.
 D'autres informations facultatives peuvent être ajoutées à ce formulaire.
-Il soumet le formulaire. Si celui-ci est validé par le système, l'utilisateur est authentifié et redirigé vers le tableau de bord de l'application.
+Il soumet le formulaire.
+Si celui-ci est validé par le système, l'utilisateur est authentifié et redirigé vers le tableau de bord de l'application.
 
 ===== Page de connexion
 Le bouton "Se connecter" redirige le visiteur vers le formulaire de connexion.
@@ -308,7 +307,7 @@ S'il confirme, il est déconnecté de l'application et est redirigé vers la pag
 ===== Gestion du compte personnel
 Tout utilisateur dispose d'un menu pour gérer son compte personnel.
 Il peut consulter et éditer les informations qu'il a encodées lors de la création de son compte sauf son adresse e-mail.
-Un formulaire lui permet de modifier de son mot de passe.
+Un formulaire lui permet de modifier son mot de passe.
 L'utilisateur doit remplir 3 champs: l'ancien mot de passe, le nouveau mot de passe, confirmer le nouveau mot de passe.
 
 L'utilisateur peut supprimer son compte.
@@ -318,8 +317,8 @@ Ceci est une suppression logique, le compte de l'utilisateur, bien que désactiv
 
 ===== Journal de relevés
 Cette fonctionnalité répond au besoin de l'utilisateur de garder un journal de ses relevés, comme le relevé hebdomadaire du poids en kg ou celui du tour de biceps en centimètre.
-Un relevé est par exemple "33 cm de tour de biceps en cm le 01/06/2022: mesure après 4 heures de jeun".
-Un relevé comprend une valeur (33), est associé à un mesurande ("tour de biceps en cm"), a une date/heure de relevé (le 01/06/2022) et peut contenir une note supplémentaire ("mesure après 4 heures de jeun").
+Un relevé est par exemple "33 cm de tour de biceps en cm le 01/06/2022: mesure après 4 heures de jeûne".
+Un relevé comprend une valeur (33), est associé à un mesurande ("tour de biceps en cm"), a une date/heure de relevé (le 01/06/2022) et peut contenir une note supplémentaire ("mesure après 4 heures de jeûne").
 
 ====== Gestion des mesurandes par l'administrateur
 L'administrateur peut créer, consulter, éditer ou supprimer des mesurandes tels que "tour du biceps en cm" et "indice de masse graisse (IMG) en pourcent" via une vue en tableau.
@@ -333,7 +332,8 @@ Il peut supprimer ou éditer ses relevés sous forme d'un tableau avec des en-t�
 Il peut rechercher des relevés via une barre de recherche.
 L'utilisateur peut rechercher un relevé parmi les relevés affichés dans un tableau listant tous les relevés d'un mesurande.
 Par exemple, l'utilisateur consulte le tableau de relevés pour le le mesurande "tour de biceps en centimètre".
-Il dispose d'un champ de recherche où il peut encoder un texte libre. Les relevés affichées dans le tableau affichées seront alors les relevés qui contiennent ce texte dans un de leurs champs textuels.
+Il dispose d'un champ de recherche où il peut encoder un texte libre.
+Les relevés affichés dans le tableau seront alors les relevés qui contiennent ce texte dans un de leurs champs textuels.
 Si aucun relevé ne correspond à cette recherche, un message d'avertissement sera affiché à l'utilisateur.
 
 ===== Gestion des comptes utilisateur
@@ -343,10 +343,10 @@ La suppression d'un compte utilisateur via cette vue est identique à la suppres
 
 ===== Gestion des rôles et permissions
 L'administrateur peut créer, éditer ou supprimer tout rôle, excepté celui d'administrateur.
-Il ne peut supprimer un rôle uniquement si ce dernier n'est assigné à aucun utilisateur.
+Il ne peut supprimer un rôle que si ce dernier n'est assigné à aucun utilisateur.
 Il peut assigner ou retirer une permission d'un rôle.
 Il ne peut pas modifier les permissions.
-Le rôle d'administrateur et les permissions assignées sont uniquement modifiables par un développeur manuellement.
+Le rôle d'administrateur et les permissions assignées sont uniquement modifiables manuellement par un développeur.
 
 ==== Planification du projet
 Il n’y a pas de contraintes. Le client n’a pas donné de date limite de livraison.
@@ -779,9 +779,9 @@ activate user
               activate system
                       activate db
                               user -> interf : demande la page de consultation du compte
-                              interf -> system : Envoie de la requête utilisateur
+                              interf -> system : Envoi de la requête utilisateur
                               system -> db : obtention des permissions de l'utilisateur
-                              db --> system : renvoie des permissions
+                              db --> system : renvoi des permissions
                               system -> system : vérification des permissions
                               alt permissions insuffisantes
                                       system --> interf: permission insuffisante
@@ -844,9 +844,9 @@ activate user
               activate system
                       activate db
                               user -> interf : demande la page d'édition du compte
-                              interf -> system : Envoie de la requête utilisateur
+                              interf -> system : Envoi de la requête utilisateur
                               system -> db : obtention des permissions de l'utilisateur
-                              db --> system : renvoie des permissions
+                              db --> system : renvoi des permissions
                               system -> system : vérification des permissions
                               alt permissions insuffisantes
                                       system --> interf: permission insuffisante
@@ -917,9 +917,9 @@ activate user
                 activate system
                         activate db
                                 user -> interf : demande la page de suppression du compte
-                                interf -> system : Envoie de la requête utilisateur
+                                interf -> system : Envoi de la requête utilisateur
                                 system -> db : obtention des permissions de l'utilisateur
-                                db --> system : renvoie des permissions
+                                db --> system : renvoi des permissions
                                 system -> system : vérification des permissions
                                 alt permissions insuffisantes
                                         system --> interf: permission insuffisante
@@ -993,9 +993,9 @@ activate user
              activate system
                      activate db
                              user -> interf : demande la page de création d'un nouveau mesurande
-                             interf -> system : Envoie de la requête utilisateur
+                             interf -> system : Envoi de la requête utilisateur
                              system -> db : obtention des permissions de l'utilisateur
-                             db --> system : renvoie des permissions
+                             db --> system : renvoi des permissions
                              system -> system : vérification des permissions
                              alt permissions insuffisantes
                                      system --> interf: permission insuffisante
@@ -1066,9 +1066,9 @@ activate user
              activate system
                      activate db
                              user -> interf : demande la page de consultation d'un  mesurande
-                             interf -> system : Envoie de la requête utilisateur
+                             interf -> system : Envoi de la requête utilisateur
                              system -> db : obtention des permissions de l'utilisateur
-                             db --> system : renvoie des permissions
+                             db --> system : renvoi des permissions
                              system -> system : vérification des permissions
                              alt permissions insuffisantes
                                      system --> interf: permission insuffisante
@@ -1131,9 +1131,9 @@ activate user
              activate system
                      activate db
                              user -> interf : demande la page d'édition d'un  mesurande
-                             interf -> system : Envoie de la requête utilisateur
+                             interf -> system : Envoi de la requête utilisateur
                              system -> db : obtention des permissions de l'utilisateur
-                             db --> system : renvoie des permissions
+                             db --> system : renvoi des permissions
                              system -> system : vérification des permissions
                              alt permissions insuffisantes
                                      system --> interf: permission insuffisante
@@ -1203,9 +1203,9 @@ activate user
              activate system
                      activate db
                              user -> interf : demande la page de suppression d'un  mesurande
-                             interf -> system : Envoie de la requête utilisateur
+                             interf -> system : Envoi de la requête utilisateur
                              system -> db : obtention des permissions de l'utilisateur
-                             db --> system : renvoie des permissions
+                             db --> system : renvoi des permissions
                              system -> system : vérification des permissions
                              alt permissions insuffisantes
                                      system --> interf: permission insuffisante
@@ -1279,9 +1279,9 @@ activate user
                 activate system
                         activate db
                                 user -> interf : demande le formulaire de recherche de relevés
-                                interf -> system : Envoie de la requête utilisateur
+                                interf -> system : Envoi de la requête utilisateur
                                 system -> db : obtention des permissions de l'utilisateur
-                                db --> system : renvoie des permissions
+                                db --> system : renvoi des permissions
                                 system -> system : vérification des permissions
                                 alt permissions insuffisantes
                                         system --> interf: permission insuffisante
@@ -1338,9 +1338,9 @@ activate user
                 activate system
                         activate db
                                 user -> interf : demande la page de création d'un nouveau relevé
-                                interf -> system : Envoie de la requête utilisateur
+                                interf -> system : Envoi de la requête utilisateur
                                 system -> db : obtention des permissions de l'utilisateur
-                                db --> system : renvoie des permissions
+                                db --> system : renvoi des permissions
                                 system -> system : vérification des permissions
                                 alt permissions insuffisantes
                                         system --> interf: permission insuffisante
@@ -1411,9 +1411,9 @@ activate user
                 activate system
                         activate db
                                 user -> interf : demande la page de consultation d'un relevé
-                                interf -> system : Envoie de la requête utilisateur
+                                interf -> system : Envoi de la requête utilisateur
                                 system -> db : obtention des permissions de l'utilisateur
-                                db --> system : renvoie des permissions
+                                db --> system : renvoi des permissions
                                 system -> system : vérification des permissions
                                 alt permissions insuffisantes
                                         system --> interf: permission insuffisante
@@ -1476,9 +1476,9 @@ activate user
               activate system
                       activate db
                               user -> interf : demande la page d'édition d'un relevé
-                              interf -> system : Envoie de la requête utilisateur
+                              interf -> system : Envoi de la requête utilisateur
                               system -> db : obtention des permissions de l'utilisateur
-                              db --> system : renvoie des permissions
+                              db --> system : renvoi des permissions
                               system -> system : vérification des permissions
                               alt permissions insuffisantes
                                       system --> interf: permission insuffisante
@@ -1549,9 +1549,9 @@ activate user
              activate system
                      activate db
                              user -> interf : demande la page de suppression d'un relevé
-                             interf -> system : Envoie de la requête utilisateur
+                             interf -> system : Envoi de la requête utilisateur
                              system -> db : obtention des permissions de l'utilisateur
-                             db --> system : renvoie des permissions
+                             db --> system : renvoi des permissions
                              system -> system : vérification des permissions
                              alt permissions insuffisantes
                                      system --> interf: permission insuffisante
@@ -1625,9 +1625,9 @@ activate user
              activate system
                      activate db
                              user -> interf : demande la page de création d'un nouveau utilisateur
-                             interf -> system : Envoie de la requête utilisateur
+                             interf -> system : Envoi de la requête utilisateur
                              system -> db : obtention des permissions de l'utilisateur
-                             db --> system : renvoie des permissions
+                             db --> system : renvoi des permissions
                              system -> system : vérification des permissions
                              alt permissions insuffisantes
                                      system --> interf: permission insuffisante
@@ -1698,9 +1698,9 @@ activate user
               activate system
                       activate db
                               user -> interf : demande la page de consultation d'un  utilisateur
-                              interf -> system : Envoie de la requête utilisateur
+                              interf -> system : Envoi de la requête utilisateur
                               system -> db : obtention des permissions de l'utilisateur
-                              db --> system : renvoie des permissions
+                              db --> system : renvoi des permissions
                               system -> system : vérification des permissions
                               alt permissions insuffisantes
                                       system --> interf: permission insuffisante
@@ -1763,9 +1763,9 @@ activate user
               activate system
                       activate db
                               user -> interf : demande la page d'édition d'un  utilisateur
-                              interf -> system : Envoie de la requête utilisateur
+                              interf -> system : Envoi de la requête utilisateur
                               system -> db : obtention des permissions de l'utilisateur
-                              db --> system : renvoie des permissions
+                              db --> system : renvoi des permissions
                               system -> system : vérification des permissions
                               alt permissions insuffisantes
                                       system --> interf: permission insuffisante
@@ -1836,9 +1836,9 @@ activate user
                 activate system
                         activate db
                                 user -> interf : demande la page de suppression d'un  utilisateur
-                                interf -> system : Envoie de la requête utilisateur
+                                interf -> system : Envoi de la requête utilisateur
                                 system -> db : obtention des permissions de l'utilisateur
-                                db --> system : renvoie des permissions
+                                db --> system : renvoi des permissions
                                 system -> system : vérification des permissions
                                 alt permissions insuffisantes
                                         system --> interf: permission insuffisante
@@ -1912,9 +1912,9 @@ activate user
              activate system
                      activate db
                              user -> interf : demande la page de création d'un nouveau rôle
-                             interf -> system : Envoie de la requête utilisateur
+                             interf -> system : Envoi de la requête utilisateur
                              system -> db : obtention des permissions de l'utilisateur
-                             db --> system : renvoie des permissions
+                             db --> system : renvoi des permissions
                              system -> system : vérification des permissions
                              alt permissions insuffisantes
                                      system --> interf: permission insuffisante
@@ -1985,9 +1985,9 @@ activate user
              activate system
                      activate db
                              user -> interf : demande la page de consultation d'un  rôle
-                             interf -> system : Envoie de la requête utilisateur
+                             interf -> system : Envoi de la requête utilisateur
                              system -> db : obtention des permissions de l'utilisateur
-                             db --> system : renvoie des permissions
+                             db --> system : renvoi des permissions
                              system -> system : vérification des permissions
                              alt permissions insuffisantes
                                      system --> interf: permission insuffisante
@@ -2050,9 +2050,9 @@ activate user
              activate system
                      activate db
                              user -> interf : demande la page d'édition d'un  rôle
-                             interf -> system : Envoie de la requête utilisateur
+                             interf -> system : Envoi de la requête utilisateur
                              system -> db : obtention des permissions de l'utilisateur
-                             db --> system : renvoie des permissions
+                             db --> system : renvoi des permissions
                              system -> system : vérification des permissions
                              alt permissions insuffisantes
                                      system --> interf: permission insuffisante
@@ -2122,9 +2122,9 @@ activate user
              activate system
                      activate db
                              user -> interf : demande la page de suppression d'un  rôle
-                             interf -> system : Envoie de la requête utilisateur
+                             interf -> system : Envoi de la requête utilisateur
                              system -> db : obtention des permissions de l'utilisateur
-                             db --> system : renvoie des permissions
+                             db --> system : renvoi des permissions
                              system -> system : vérification des permissions
                              alt permissions insuffisantes
                                      system --> interf: permission insuffisante
@@ -2231,7 +2231,7 @@ start
 :Visiteur demande la page d'inscription;
 :Le formulaire d'inscription s'affiche;
 :Entre son adresse e-mail, sa date de naissance, son nom de visiteur unique, son mot de passe et autres informations;
-while(Soumets le formulaire) is (formulaire invalide)
+while(Soumet le formulaire) is (formulaire invalide)
 :Redirigé vers la même page avec des messages d'erreurs;
 :Visiteur corrige les champs erronés;
 endwhile (formulaire valide)
@@ -2253,7 +2253,7 @@ start
 :Visiteur demande la page de connexion;
 :Le formulaire de connexion s'affiche;
 :Entre son nom de visiteur et son mot de passe;
-while(Soumets le formulaire) is (formulaire invalide)
+while(Soumet le formulaire) is (formulaire invalide)
 :Redirigé vers la même page avec des messages d'erreurs;
 :Visiteur corrige les champs erronés;
 endwhile (formulaire valide)
@@ -2299,7 +2299,7 @@ stop
 [options="header,autowidth"]
 |===
 | # | Action | Résultat attendu
-| 1 | Se connecter à l’app avec l’utilisateur “user01” | L’utilisateur est redirigé vers son dashboard
+| 1 | Se connecter à l’app avec l’utilisateur "user01" | L’utilisateur est redirigé vers son dashboard
 | 2 | Le dashboard affiche un message de bienvenue | Le message de bienvenue est clairement visible et respecte les normes d’accessibilité européennes
 |===
 
@@ -2307,8 +2307,8 @@ stop
 [options="header,autowidth"]
 |===
 | # | Action | Résultat attendu
-| 1 | Se connecter à l’app avec l’utilisateur “admin”  | L’utilisateur est redirigé vers son dashboard
-| 2 | L’utilisateur clique sur le bouton “Utilisateurs” dans le menu de navigation  | L’utilisateur est redirigé vers la liste des utilisateurs
+| 1 | Se connecter à l’app avec l’utilisateur "admin"  | L’utilisateur est redirigé vers son dashboard
+| 2 | L’utilisateur clique sur le bouton "Utilisateurs" dans le menu de navigation  | L’utilisateur est redirigé vers la liste des utilisateurs
 | 3 | Valider la présence de la liste d’utilisateurs | Les utilisateurs de tests doivent être listés
 |===
 
@@ -2316,17 +2316,17 @@ stop
 [options="header,autowidth"]
 |===
 | # | Action | Résultat attendu
-| 1 | Se connecter à l’app avec l’utilisateur “admin” | L’utilisateur est redirigé vers son dashboard
-| 2 | L’utilisateur clique sur le bouton “Utilisateurs” dans le menu de navigation | L’utilisateur est redirigé vers la liste des utilisateurs
+| 1 | Se connecter à l’app avec l’utilisateur "admin" | L’utilisateur est redirigé vers son dashboard
+| 2 | L’utilisateur clique sur le bouton "Utilisateurs" dans le menu de navigation | L’utilisateur est redirigé vers la liste des utilisateurs
 | 3 | Valider la présence de la liste d’utilisateurs | Les utilisateurs de tests doivent être listés
-| 4 | Valider la présence de l’utilisateur “Jean-fromage” | L’utilisateur nommé “Jean-fromage” doit être présent
-| 5 | Valider la présence du bouton “Consulter” à côté de l’utilisateur | Le bouton “Consulter doit être visible et cliquable par l’utilisateur
-| 6 | L’utilisateur clique sur le bouton “Consulter” | L’utilisateur est redirigé vers la page contenant les détails de l’utilisateur consulté
+| 4 | Valider la présence de l’utilisateur "Jean-balle" | L’utilisateur nommé "Jean-balle" doit être présent
+| 5 | Valider la présence du bouton "Consulter" à côté de l’utilisateur | Le bouton "Consulter" doit être visible et cliquable par l’utilisateur
+| 6 | L’utilisateur clique sur le bouton "Consulter" | L’utilisateur est redirigé vers la page contenant les détails de l’utilisateur consulté
 |===
 
 [.portrait]
 <<<
-=== Les standards applicatif
+=== Les standards applicatifs
 
 ==== Charte graphique
 
@@ -2381,15 +2381,15 @@ scale 2.5
 
 ==== TODO Les écrans
 
-IMPORTANT: à compléter une fois que l'application est dévelopée
+IMPORTANT: à compléter une fois que l'application est développée
 
 ===== TODO Le standard des pages
 
-IMPORTANT: à compléter une fois que l'application est dévelopée
+IMPORTANT: à compléter une fois que l'application est développée
 
 ===== TODO Capture de chaque écran
 
-IMPORTANT: à compléter une fois que l'application est dévelopée
+IMPORTANT: à compléter une fois que l'application est développée
 
 <<<
 == Le projet
@@ -2526,23 +2526,22 @@ then [Supprimer utilisateur] on {AK} lasts 1 days
 <<<
 === TODO Budget réel
 
-IMPORTANT: à compléter une fois que l'application est dévelopée
+IMPORTANT: à compléter une fois que l'application est développée
 
 ==== TODO Coût réel
 
-IMPORTANT: à compléter une fois que l'application est dévelopée
+IMPORTANT: à compléter une fois que l'application est développée
 
 <<<
 == Conclusion
 
-Ce projet nous a permis de collaborer en équipe afin de le mener à bien tout en nous rendant autonome.
+Ce projet nous a permis de collaborer en équipe afin de le mener à bien tout en nous rendant autonomes.
 Nous avons grâce à celui-ci pu comprendre l'intérêt de chaque outil aux différentes étapes de l’analyse.
 Depuis le début de celui-ci, nous avons acquis de l'expérience dans l’analyse et nous avons maintenant conscience du travail que cela implique.
 
 <<<
-== Remerciement
-
-La réalisation de ce travail de n’aurait pas été possible sans certaines personnes que je tiens à remercier.
+== Remerciements
+La réalisation de ce travail n’aurait pas été possible sans les personnes que je tiens à remercier ici.
 Tout d’abord, je remercie le chargé de cours, Monsieur Mathieu.
 J’adresse également mes remerciements à Monsieur Lawarée, Monsieur De Guglielmo, Monsieur Boulafentis et Monsieur Diana, pour leur expertise, leur disponibilité et pour les connaissances qu’ils nous ont apportées tout au long de notre cursus.
 
