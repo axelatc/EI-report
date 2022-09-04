@@ -21,7 +21,7 @@ the maven build should display "BUILD SUCCESS" and the pdf is available at `targ
 = TFE: App Web SHAPP
 :notitle:
 :author: AK
-//:doctype: book
+:doctype: book
 // Settings:
 :reproducible:
 :icons: font
@@ -30,7 +30,9 @@ the maven build should display "BUILD SUCCESS" and the pdf is available at `targ
 :table-stripes: even
 :imagesdir: ./images
 :outdir: ./out
-//:!chapter-signifier:
+:chapter-signifier: Chapitre
+:!part-signifier:
+:!section-signifier:
 :chapter-refsig: Chapitre
 :section-refsig: Section
 :appendix-refsig: Annexe
