@@ -594,6 +594,7 @@ measurands::measurand_id --> measures::measurand_id
 [plantuml,target=diagclasses,format=svg]
 ....
 @startuml
+scale 0.9
 hide empty methods
 
 'left to right direction
