@@ -50,6 +50,7 @@ the maven build should display "BUILD SUCCESS" and the pdf is available at `targ
 :front-cover-image: image:cover.png[]
 :source-highlighter: coderay
 
+<<<
 == Révisions
 [cols=4,frame=ends,grid=rows]
 |===
@@ -104,7 +105,7 @@ QUAIRIA William
 Suppression des parties de William (abandon)
 |===
 
-
+<<<
 == Introduction
 
 Ce travail de fin d’études a pour objectif de concevoir un projet viable en collaboration.
@@ -131,16 +132,16 @@ S’agissant d’un nouveau développement applicatif, ce projet nous donne l’
 === Client
 Pour des raisons évidentes de confidentialité, nous utiliserons la dénomination fictive de “FitCorp” en référence à notre société cliente.
 
-
+<<<
 === Choix du projet
 
 Au cours de la crise du covid, suite à la fermeture générale imposée, beaucoup de sportifs se sont retrouvés orphelins de leurs salles et clubs de sport.
 Les habitudes d’entraînement, les équipements ainsi que le matériel accessible ont été profondément altérés.
 
-L’objectif, faisant suite à un appel d’offre lancé par FitCorp, est de fournir une alternative conséquente aux applications traditionnelles de programmation sportive en vue de répondre à des besoins jusqu’ici  insatisfaits qui se sont vus renforcés par la crise du Covid.
-La société cliente s’occupera de la mise sur le marché et de la commercialisation des différents plans
-d’abonnements à cette nouvelle application.
+L’objectif, faisant suite à un appel d’offre lancé par FitCorp, est de fournir une alternative conséquente aux applications traditionnelles de programmation sportive en vue de répondre à des besoins jusqu’ici insatisfaits qui se sont vus renforcés par la crise du Covid.
+La société cliente s’occupera de la mise sur le marché et de la commercialisation des différents plans d’abonnements à cette nouvelle application.
 
+<<<
 == Les techniques
 === Les outils de développement
 //TODO: Ajouter les versions exactes aux librairies
@@ -168,6 +169,7 @@ Nous allons réaliser une application “hub” sportif faite à l’aide des te
 - Git
 - Google Chrome
 
+<<<
 === Le matériel
 ==== Infrastructure pour l’application et la base de données
 Le datacenter doit se situer en Europe pour respecter le RGPD (Règlement Général sur la Protection des Données) et proche de la Belgique pour une meilleure efficacité (législation, rapidité, maintenance, service client).
@@ -207,6 +209,7 @@ Nous avons opté pour une base de données hébergée par OVH (Cloud Database).
 La maintenance et la mise à jour du système d’exploitation et du moteur de base de données sont entièrement gérées par OVH.
 Des sauvegardes de la base de donnée sont aussi effectuées toutes les 24 heures et sont disponibles depuis l’Espace Client.
 
+<<<
 == Analyse
 === Cahier des charges fonctionnel
 
@@ -236,6 +239,7 @@ Le développeur a besoin des conditions suivantes pour  mener le projet à bien:
 - Un local spacieux, aéré, lumineux, calme et disposant d'une installation électrique, d'une connexion internet puissante et de toilettes
 - 1 ordinateur portable, 1 bureau, 1 chaise, 2 écrans, 1 souris, 1 clavier
 
+<<<
 ==== Définir les limites et les rôles du projet
 ===== Rôles
 . Visiteur non authentifié
@@ -274,6 +278,7 @@ Nous ne dépasserons pas le nombre de mille utilisateurs dans la première anné
 ===== Pays
 L'application est destinée à la Belgique.
 
+<<<
 ==== Description fonctionnelle des besoins
 NOTE: Pour toute donnée devant être encodée par l'utilisateur, vous trouverez dans <<dictionnaire-des-données>> les conditions et restrictions appliquées à cette donnée.
 
@@ -348,20 +353,22 @@ Le rôle d'administrateur et les permissions assignées sont uniquement modifiab
 ==== Planification du projet
 Il n’y a pas de contraintes. Le client n’a pas donné de date limite de livraison.
 
+<<<
 === Les rôles et permissions
 Cf. <<définir-les-limites-et-les-rôles-du-projet>>
 
+<<<
 === Les cas d'utilisation
 .Les cas d'utilisation
-[plantuml,target=usecase-global,format=png]
+[plantuml,target=usecase-global,format=svg]
 ....
 @startuml
 '!theme plain
 'skinparam linetype ortho
 'skinparam monochrome true
 'skinparam shadowing false
-'skinparam defaultFontSize 22
-'scale 2
+skinparam defaultFontSize 50
+scale 10
 left to right direction
 
 actor Visiteur as visi
@@ -440,8 +447,11 @@ rôles <.. (Supprimer rôle) : extends
 
 //TODO: faire les uses cases textuels
 
-=== TODO: Le modèle conceptuel de données (MCD)
-//TODO: trouver un composant qui s'affiche en cercle/arrondi
+[.portrait]
+<<<
+=== Le modèle conceptuel de données (MCD)
+
+//TODO: afficher les associations (class abstract) avec des bords arrondis
 .Le modèle conceptuel de données (MCD)
 [plantuml,target=mcd,format=svg]
 ....
@@ -492,6 +502,7 @@ entity Test2 <<number2>>
 @enduml
 ....
 
+<<<
 === Le modèle logique des données (MLD)
 .Le modèle logique des données (MLD)
 [plantuml,target=mld,format=svg]
@@ -569,6 +580,7 @@ measurands::measurand_id --> measures::measurand_id
 @enduml
 ....
 
+<<<
 === Diagramme de classe
 .Diagramme de classe
 [plantuml,target=diagclasses,format=svg]
@@ -665,8 +677,9 @@ measure "0..*" -- "1" measurand : is of >
 @enduml
 ....
 
+[.landscape]
+<<<
 === Dictionnaire des données
-//TODO: faire en sorte que les tables s'affichent en landscape ou que le format soit lisible
 
 ==== Table des utilisateurs
 [caption="Table des utilisateurs", cols="2,5,2,1,2,1,1,1,1,1,5", stripes=even, frames=ends, grid=cols, options="header, breakable, rotate", width=100%]
@@ -733,11 +746,11 @@ omegalul test
 |Cell in column 2, row 2
 |===
 
-[.landscape]
-=== TODO remove Landscape page
-
+[.portrait]
+<<<
 === Diagrammes de séquence
 ==== Gestion du compte personnel
+
 .Consulter son compte personnel
 [plantuml,target=diagseq_utilisateur_consulterCompte,format=svg]
 ....
@@ -950,6 +963,7 @@ end
 @enduml
 ....
 
+<<<
 ==== Gestion des mesurandes
 .Créer un mesurande
 [plantuml,target=diagseq_admin_creerMesurande,format=svg]
@@ -1235,6 +1249,7 @@ end
 @enduml
 ....
 
+<<<
 ==== Gestion des relevés
 .Rechercher un relevé
 [plantuml,target=diagseq_user_rechercherReleve,format=svg]
@@ -1580,6 +1595,7 @@ end
 @enduml
 ....
 
+<<<
 ==== Gestion des comptes utilisateur
 .Créer un compte utilisateur
 [plantuml,target=diagseq_admin_creerUtilisateur,format=svg]
@@ -1866,6 +1882,7 @@ end
 @enduml
 ....
 
+<<<
 ==== Gestion des rôles
 .Créer un rôle
 [plantuml,target=diagseq_admin_creerRole,format=svg]
@@ -2151,6 +2168,7 @@ end
 @enduml
 ....
 
+<<<
 === Diagrammes d'état-transition
 .L'utilisateur assigne ou retire une permission d'un rôle
 [plantuml,target=diagetats_permission_etats,format=svg]
@@ -2190,6 +2208,9 @@ Authentifié --> NonAuthentifié: Option "se déconnecter" utilisée
 NonAuthentifié --> [*]: Ferme le navigateur
 @enduml
 ....
+
+<<<
+
 === Diagrammes d'activité
 
 .Le visiteur souhaite se créer un compte
@@ -2263,6 +2284,8 @@ stop
 @enduml
 ....
 
+[.landscape]
+<<<
 === Les tests case
 
 .U01: Utilisateur: redirigé vers le dashboard
@@ -2294,8 +2317,12 @@ stop
 | 6 | L’utilisateur clique sur le bouton “Consulter” | L’utilisateur est redirigé vers la page contenant les détails de l’utilisateur consulté
 |===
 
+[.portrait]
+<<<
 === Les standards applicatif
+
 ==== Charte graphique
+
 ===== Palette
 // The Material color picker I used to obtain this palette: https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=6200EE&secondary.color=FFD740
 // I picked the primary and secondary colors based on the Angular Material default "deeppurple-amber" theme: https://github.com/angular/components/blob/main/src/material/core/theming/prebuilt/deeppurple-amber.scss
@@ -2320,6 +2347,7 @@ image::charte-barreoutils.PNG[Barre d'outils, 400, 400]
 .Cartes
 image::charte-cartes.PNG[Cartes, 400, 400]
 
+<<<
 ==== Maquette écran d'accueil
 
 .Tableau de bord de l'administrateur
@@ -2341,15 +2369,22 @@ scale 2.5
 }
 @endsalt
 ....
+
+<<<
+
 ==== TODO Les écrans
+
 IMPORTANT: à compléter une fois que l'application est dévelopée
 
 ===== TODO Le standard des pages
+
 IMPORTANT: à compléter une fois que l'application est dévelopée
 
 ===== TODO Capture de chaque écran
+
 IMPORTANT: à compléter une fois que l'application est dévelopée
 
+<<<
 == Le projet
 === Budget prévisionnel
 ////
@@ -2357,6 +2392,7 @@ The tables in this section were made in Excel then simply copy-pasted to this fi
 The `format=tsv` attribute on the tables ensures the splitting of datas.
 ////
 ==== Descriptif
+
 Un unique développeur Junior est prévu pour le projet.
 Le projet doit démarrer le 01/01/2022.
 
@@ -2420,6 +2456,8 @@ Location nom de domaine	 € 120.00
 Total	 € 1,602.96
 |===
 
+[.landscape]
+<<<
 ==== Diagramme de GANTT
 
 Date de fin estimée du projet: 23/03/2022
@@ -2468,28 +2506,35 @@ then [Supprimer utilisateur] on {AK} lasts 1 days
 @endgantt
 ....
 
+[.portrait]
+<<<
 === TODO Budget réel
 IMPORTANT: à compléter une fois que l'application est dévelopée
 
 ==== TODO Coût réel
 
 
-== TODO Conclusion
+<<<
+
+== Conclusion
+
 Ce projet nous a permis de collaborer en équipe afin de le mener à bien tout en nous rendant autonome.
 Nous avons grâce à celui-ci pu comprendre l'intérêt de chaque outil aux différentes étapes de l’analyse.
 Depuis le début de celui-ci, nous avons acquis de l'expérience dans l’analyse et nous avons maintenant
 conscience du travail que cela implique.
 
 == Remerciement
+
 La réalisation de ce travail de n’aurait pas été possible sans certaines personnes que je tiens à remercier.
 Tout d’abord, je remercie le chargé de cours, Monsieur Mathieu.
-J’adresse également mes remerciements à Monsieur Lawarée, Monsieur De Guglielmo, Monsieur
-Boulafentis et Monsieur Diana, pour leur expertise, leur disponibilité et pour les connaissances qu’ils nous ont apportées tout au
-long de notre cursus.
+J’adresse également mes remerciements à Monsieur Lawarée, Monsieur De Guglielmo, Monsieur Boulafentis et Monsieur Diana, pour leur expertise, leur disponibilité et pour les connaissances qu’ils nous ont apportées tout au long de notre cursus.
 
 Enfin, je tiens à remercier mon camarade William Quairia, ma famille et mes proches pour leur aide et leur soutien.
 
+<<<
+
 == Les annexes
+
 IMPORTANT: section vide
 
 == Bibliographie et webographie
