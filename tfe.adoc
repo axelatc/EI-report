@@ -23,7 +23,6 @@ the maven build should display "BUILD SUCCESS" and the pdf is available at `targ
 :author: AK
 //:doctype: book
 // Settings:
-:pdf-page-layout: portrait
 :reproducible:
 :icons: font
 :listing-caption: Listing
@@ -49,11 +48,9 @@ the maven build should display "BUILD SUCCESS" and the pdf is available at `targ
 :pdf-themesdir: {docdir}
 :pdf-theme: tfe.yml
 :front-cover-image: image:cover.png[]
-//:pdf-page-layout: landscape
 :source-highlighter: coderay
 
 == Révisions
-
 [cols=4,frame=ends,grid=rows]
 |===
 |Version & Date |Nom de l'auteur |Sections |Modifications
@@ -136,6 +133,7 @@ Pour des raisons évidentes de confidentialité, nous utiliserons la dénominati
 
 
 === Choix du projet
+
 Au cours de la crise du covid, suite à la fermeture générale imposée, beaucoup de sportifs se sont retrouvés orphelins de leurs salles et clubs de sport.
 Les habitudes d’entraînement, les équipements ainsi que le matériel accessible ont été profondément altérés.
 
@@ -228,7 +226,7 @@ Deux langues doivent être supportées par l'application: le français et l'angl
 L'application web devra être testée et développée pour les navigateurs Google Chrome et Microsoft Edge
 
 ===== Les contraintes légales et réglementaires
-//TODO: fix RGPD footnote
+//TODO: fix RGPD footnote: asciidoctor-pdf extension always displays the footnotes at the end of the PDF document, so there's no solution
 L'application hébergeant des données personnelles, elle devra être conforme juridiquement au RGPD.{empty}footnote:[Règlement général sur la protection des données. Relatif à la protection des personnes physiques à l'égard du traitement des données à caractère personnel et à la libre circulation de ces données.]
 
 
