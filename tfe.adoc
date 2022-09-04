@@ -2266,9 +2266,35 @@ stop
 ....
 
 === Les tests case
-//TODO: faire au moins 2-3 tests cases rapidement?
-Aucun analyste dédié n'a été assigné au projet.
-Par manque de ressource humaine aucun test case n'a été analysé.
+
+.U01: Utilisateur: redirigé vers le dashboard
+[options="header,autowidth"]
+|===
+| # | Action | Résultat attendu
+| 1 | Se connecter à l’app avec l’utilisateur “user01” | L’utilisateur est redirigé vers son dashboard
+| 2 | Le dashboard affiche un message de bienvenue | Le message de bienvenue est clairement visible et respecte les normes d’accessibilité européennes
+|===
+
+.A01: Administrateur: consulter la liste des utilisateurs
+[options="header,autowidth"]
+|===
+| # | Action | Résultat attendu
+| 1 | Se connecter à l’app avec l’utilisateur “admin”  | L’utilisateur est redirigé vers son dashboard
+| 2 | L’utilisateur clique sur le bouton “Utilisateurs” dans le menu de navigation  | L’utilisateur est redirigé vers la liste des utilisateurs
+| 3 | Valider la présence de la liste d’utilisateurs | Les utilisateurs de tests doivent être listés
+|===
+
+.A02: Administrateur: consulter les détails d’un utilisateur
+[options="header,autowidth"]
+|===
+| # | Action | Résultat attendu
+| 1 | Se connecter à l’app avec l’utilisateur “admin” | L’utilisateur est redirigé vers son dashboard
+| 2 | L’utilisateur clique sur le bouton “Utilisateurs” dans le menu de navigation | L’utilisateur est redirigé vers la liste des utilisateurs
+| 3 | Valider la présence de la liste d’utilisateurs | Les utilisateurs de tests doivent être listés
+| 4 | Valider la présence de l’utilisateur “Jean-fromage” | L’utilisateur nommé “Jean-fromage” doit être présent
+| 5 | Valider la présence du bouton “Consulter” à côté de l’utilisateur | Le bouton “Consulter doit être visible et cliquable par l’utilisateur
+| 6 | L’utilisateur clique sur le bouton “Consulter” | L’utilisateur est redirigé vers la page contenant les détails de l’utilisateur consulté
+|===
 
 === Les standards applicatif
 ==== Charte graphique
