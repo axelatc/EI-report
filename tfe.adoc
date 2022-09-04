@@ -48,7 +48,6 @@ the maven build should display "BUILD SUCCESS" and the pdf is available at `targ
 :xrefstyle: full
 :pdf-themesdir: {docdir}
 :pdf-theme: tfe.yml
-//TODO: create my own cover page
 :front-cover-image: image:cover.png[]
 //:pdf-page-layout: landscape
 :source-highlighter: coderay
