@@ -357,7 +357,7 @@ Cf. <<définir-les-limites-et-les-rôles-du-projet>>
 
 <<<
 === Les cas d'utilisation
-
+//TODO: improve display of usecases
 .Les cas d'utilisation
 [plantuml,target=usecase-global,format=svg]
 ....
@@ -444,7 +444,7 @@ rôles <.. (Supprimer rôle) : extends
 @enduml
 ....
 
-//TODO: faire les uses cases textuels
+//TODO: faire les uses cases textuels si mathieu le demande dans son feedback
 
 [.portrait]
 <<<
@@ -755,7 +755,7 @@ measure "0..*" -- "1" measurand : is of >
 [.portrait]
 <<<
 === Diagrammes de séquence
-//TODO: augmenter la taille de police des diagrammes
+//TODO: augmenter la taille de police des diagrammes/les rendre lisibles
 ==== Gestion du compte personnel
 
 .Consulter son compte personnel
