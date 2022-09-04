@@ -7,7 +7,7 @@ footer:
     right:
       content: '{section-or-chapter-title} | {page-number}'
     left:
-      content: 'Axel Krebs | Épreuve Intégrée | Aumôniers du Travail'
+      content: ''
   verso:
     right:
       content: $footer_recto_right_content
