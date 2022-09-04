@@ -690,8 +690,8 @@ measure "0..*" -- "1" measurand : is of >
 <<<
 === Dictionnaire des données
 
-==== Table des utilisateurs
-[caption="Table des utilisateurs", cols="2,5,2,1,2,1,1,1,1,1,5", stripes=even, frames=ends, grid=cols, options="header, breakable, rotate", width=100%]
+.Utilisateurs
+[cols="3,4,3,1,2,1,1,1,1,1,4",grid=cols,options="header",width=100%]
 |===
 |Field|Definition|Type|Nullable|Default Value|PK|FK|AI|UNS|UNI|Definition domain and constraints
 |user_id|numéro unique, identifiant de la table|INT(11)|||x||x|x|| > 0
@@ -705,54 +705,51 @@ measure "0..*" -- "1" measurand : is of >
 |email_address|adresse e-mail|VARCHAR(255)|||||||x|respecte une expression régulière qui restreint au format e-mail standard "nom@domaine"; minimum 3 caractères, ex: ""a@o"";maximum 254 caractères; unique"
 |creation_date_time|date et heure de création du compte|DATETIME||NOW||||||antérieure ou égale à maintenant
 |active|compte utilisateur est activé ou non|BOOLEAN||true||||||false or true
+|===
 
-|TABLE ROLES||||||||||
+.Roles
+[cols="3,4,3,1,2,1,1,1,1,1,4",grid=cols,options="header",width=100%]
+|===
+|Field|Definition|Type|Nullable|Default Value|PK|FK|AI|UNS|UNI|Definition domain and constraints
 |role_id|numéro unique, identifiant de la table [roles]|INT(11)|||x||x|x|| > 0
 |label|libellé|VARCHAR(100)||||||||min. 1 char ; unique
 |description|description|VARCHAR(2000)||none||||||
+|===
 
-|TABLE ROLES_PERMISSIONS||||||||||
+.Roles_Permissions
+[cols="3,4,3,1,2,1,1,1,1,1,4",grid=cols,options="header",width=100%]
+|===
+|Field|Definition|Type|Nullable|Default Value|PK|FK|AI|UNS|UNI|Definition domain and constraints
 |role_permission_id|numéro unique, identifiant de la table [roles_permissions]|INT(11)|||x||x|x|| > 0
 |role_id|numéro unique, identifiant de la table [roles]|INT(11)||||x||x||> 0 ; unique avec permission_id
 |permission_id|numéro unique, identifiant de la table [permissions]|INT(11)||||x||x||> 0 ; unique avec role_id
+|===
 
-|TABLE PERMISSIONS||||||||||
+.Permissions
+[cols="3,4,3,1,2,1,1,1,1,1,4",grid=cols,options="header",width=100%]
+|===
+|Field|Definition|Type|Nullable|Default Value|PK|FK|AI|UNS|UNI|Definition domain and constraints
 |permission_id|numéro unique, identifiant de la table [permissions]|INT(11)|||x||x|x|| > 0
 |label|libellé|VARCHAR(100)|||||||x|min. 1 char ; unique
-
-|TABLE MEASURES||||||||||
-|user_id|clé de la table [users], représente l'utilisateur|INT(11)|x||x|x||x|null et >0|
-|measurand_id|clé de la table [measurands], représente le type de mesure|INT(11)|x||x|x||x|null et >0|
-|creation_date_time|instant d'encodage|DATETIME|||x||||> la date de création de l'utilisateur et granularité horaire à la milliseconde|
-|value|la valeur numérique|DOUBLE|||||||>= 0 et 5 décimales max après la virgule|On ne permet pas de valeurs négatives car on ne journalise pas des deltas ou autres traitements statistiques avancés."
-|note|note supplémentaire|TEXT|x||||||min. 1 char|
-
-|TABLE MEASURANDS||||||||||
-|measurand_id|numéro unique, identifiant de la table|INT(11)|||x||x|x|> 0|
-|label|nom|VARCHAR(50)|||||||min. 1 char|
 |===
 
-=== TODO remove Rotated table
-
-[%rotate]
+.Measures
+[cols="3,4,3,1,2,1,1,1,1,1,4",grid=cols,options="header",width=100%]
 |===
-|Cell in column 1, row 1
-|Cell in column 2, row 1
-
-|Cell in column 1, row 2
-|Cell in column 2, row 2
+|Field|Definition|Type|Nullable|Default Value|PK|FK|AI|UNS|UNI|Definition domain and constraints
+|user_id|clé de la table [users], représente l'utilisateur|INT(11)|x||x|x||x||null et >0
+|measurand_id|clé de la table [measurands], représente le type de mesure|INT(11)|x||x|x||x||null et >0
+|creation_date_time|instant d'encodage|DATETIME|||x|||||> la date de création de l'utilisateur et granularité horaire à la milliseconde
+|value|la valeur numérique|DOUBLE||||||||>= 0 et 5 décimales max après la virgule; On ne permet pas de valeurs négatives car on ne journalise pas des deltas ou autres traitements statistiques avancés."
+|note|note supplémentaire|TEXT|x|||||||min. 1 char
 |===
 
-omegalul test
-
-=== TODO remove Landscape table
-[orientation=landscape]
+.Measurands
+[cols="3,4,3,1,2,1,1,1,1,1,4",grid=cols,options="header",width=100%]
 |===
-|Cell in column 1, row 1
-|Cell in column 2, row 1
-
-|Cell in column 1, row 2
-|Cell in column 2, row 2
+|Field|Definition|Type|Nullable|Default Value|PK|FK|AI|UNS|UNI|Definition domain and constraints
+|measurand_id|numéro unique, identifiant de la table|INT(11)|||x||x|x|| > 0
+|label|nom|VARCHAR(50)||||||||min. 1 char
 |===
 
 [.portrait]
