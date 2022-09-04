@@ -39,7 +39,7 @@ the maven build should display "BUILD SUCCESS" and the pdf is available at `targ
 :mmdc: ./node_modules/.bin/mmdc
 :sectanchors:
 :sectnums:
-:sectnumlevels: 5
+:sectnumlevels: 3
 :hardbreaks-option:
 :idprefix:
 :idseparator: -
