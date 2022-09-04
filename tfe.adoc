@@ -455,49 +455,58 @@ rôles <.. (Supprimer rôle) : extends
 [plantuml,target=mcd,format=svg]
 ....
 @startuml
-skinparam useBetaStyle true
-' style enclosure declaration
-<style>
-' scope to classDiagram elements
-objectDiagram {
+hide empty methods
+hide circle
 
-' define a new style, using CSS class syntax
-     class {
-        RoundCorner 35
-     }
+skinparam linetype ortho
+
+skinparam abstract {
+    RoundCorner 35
+}
+
+class "users" as users {
+}
+
+together {
+    abstract "has a" as users_roles {
+    }
+
+    class "roles" as roles {
+    }
+
+    abstract "have" as roles_permissions  {
+    }
+
+    class "permissions" as permissions {
     }
 }
-</style>
 
-interface have as "Have" {}
-class User {}
-class Role {}
+together {
+    class "measures" as measures {
+    }
 
-User "0..*" -- have
-have "1" -- Role
+    abstract "encodes" as users_measures {
+    }
 
-@enduml
-....
+    class "measurands" as measurands {
+    }
 
-[plantuml]
-....
-@startuml
-skinparam useBetaStyle true
-' style enclosure declaration
-<style>
-' scope to sequenceDiagram elements
-classDiagram {
-
-' define a new style, using CSS class syntax
-     .number2 {
-        BackgroundColor  #Green
-        RoundCorner 25
-     }
+    abstract "is of" as measures_measurands {
     }
 }
-</style>
 
-entity Test2 <<number2>>
+
+users "1" -- users_roles
+users_roles -- "0,n" roles
+
+roles "0,n" -- roles_permissions
+roles_permissions -- "0,n" permissions
+
+users "0,n" -- users_measures
+users_measures -- "0,n" measures
+
+measures "1" -- measures_measurands
+measures_measurands -- "0,n" measurands
 @enduml
 ....
 
